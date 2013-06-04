@@ -1,0 +1,33 @@
+.topic{
+}
+.topic p{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.topic .gray{
+    color: #ccc;
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+.comment{
+    margin-top: 10px;
+    margin-left: 40px;
+    margin-bottom: 10px;
+}
+.comment p{
+    margin-top: 0px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+.comment .gray{
+    color: #ccc;
+    margin-left: 20px;
+    margin-bottom: 0px;
+}
+
+.black{
+    color: #000;
+    font-size: 14px;
+}

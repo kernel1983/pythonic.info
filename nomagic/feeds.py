@@ -93,17 +93,10 @@ def new_status(user_id, data):
     user["activity"] = activity
     nomagic._update_entity_by_id(user_id, user)
 
-    posts_in_year_entity_id, posts_in_year = get_posts_entity_by_year(user_id, now.year)
-    posts_today = posts_in_year.get(str(now.month), {}).get(str(now.day), [])
-    posts_today.append(new_id)
-    posts_in_year[str(now.month)][str(now.day)] = posts_today
-    nomagic._update_entity_by_id(posts_in_year_entity_id, posts_in_year)
-
     data["user"] = user
     data["like_count"] = 0
     data["like"] = False
     data["comment_count"] = 0
-    data["comments"] = []
 
     assert conn.execute_rowcount("INSERT INTO index_posts (user_id, entity_id) VALUES(%s, %s)", user_id, new_id)
     return new_id, data
@@ -143,12 +136,20 @@ def get_public_news_feed(activity_offset=10, activity_start_id=None):
         return [dict(activity,
                      like_count = len(activity.get("likes", [])),
                      comment_count = len(activity.get("comment_ids", [])),
-                     comments = [dict(comment,
-                                      like_count = len(comment.get("likes", [])),
-                                      id=comment_id)
-                                 for comment_id, comment in nomagic._get_entities_by_ids(activity.get("comment_ids", []))])
-                     for activity in activities]
+                     ) for activity in activities]
     return []
+
+def get_news_by_id(activity_id):
+    activity = nomagic._get_entity_by_id(activity_id)
+    activity["id"] = activity_id
+    comments, user_ids = get_comments(activity)
+
+    return dict(activity,
+                id = activity_id,
+                like_count = len(activity.get("likes", [])),
+                comment_count = 0, #len(activity.get("comment_ids", [])),
+                comments = comments), user_ids
+
 
 def new_comment(user_id, entity_id, data):
     data["type"] = "comment"
@@ -171,17 +172,22 @@ def new_comment(user_id, entity_id, data):
 
     return comment_ids, dict(data, id=new_comment_id, like_count=0, like=False, user=nomagic._get_entity_by_id(user_id))
 
-"""
-def get_comments(entity_id):
-    entity = nomagic._get_entity_by_id(entity_id)
-    comment_ids = entity.get("comment_ids", []) if entity else []
-    if entity:
-        if len(comment_ids) > 1:
-            return conn.query("SELECT * FROM entities WHERE id IN %s" % str(tuple(comment_ids)))
-        elif len(comment_ids) == 1:
-            return conn.query("SELECT * FROM entities WHERE id = %s", comment_ids[0])
-    return []
-"""
+
+def get_comments(entity, user_ids = set()):
+    assert "comment_ids" in entity
+    assert "comments" not in entity
+    entity_comments = entity.get("comments", [])
+    for comment_id, comment in nomagic._get_entities_by_ids(entity.get("comment_ids", [])):
+        comment["id"] = comment_id
+        comment["like_count"] = len(entity.get("likes", [])),
+        comment["comment_count"] = 0, #len(activity.get("comment_ids", [])),
+        user_ids.add(comment["user_id"])
+        if comment.get("comment_ids"):
+            get_comments(comment, user_ids)
+        entity_comments.append(comment)
+
+    entity["comments"] = entity_comments
+    return entity_comments, user_ids
 
 def like(user_id, entity_id):
     entity = nomagic._get_entity_by_id(entity_id)

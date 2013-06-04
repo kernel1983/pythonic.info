@@ -1,0 +1,257 @@
+/*!
+ * Bootstrap Responsive v2.0.4
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+
+.hide-text {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+.input-block-level {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.visible-phone {
+  display: none !important;
+}
+
+.visible-tablet {
+  display: none !important;
+}
+
+.hidden-desktop {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .visible-phone {
+    display: inherit !important;
+  }
+  .hidden-phone {
+    display: none !important;
+  }
+  .hidden-desktop {
+    display: inherit !important;
+  }
+  .visible-desktop {
+    display: none !important;
+  }
+  #notifications .notificationList.dropdown-menu{
+    left: -170px;
+  }
+  #notifications .notificationList.dropdown-menu::after{
+      left: 190px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .visible-tablet {
+    display: inherit !important;
+  }
+  .hidden-tablet {
+    display: none !important;
+  }
+  .hidden-desktop {
+    display: inherit !important;
+  }
+  .visible-desktop {
+    display: none !important ;
+  }
+}
+@media (max-width: 320px){
+    .searchPage .search.span9, .completeSignUp.span9,.people.span9{width:100%;}
+
+    ul li.comment .rightSection {
+        box-sizing: border-box;
+    }
+    .row-fluid .span4.signUpContainer,.mainSignUp{width:100%;}
+    .mainSignUp{margin-top:0% !important;}
+    .miniContentBox>.leftSection{padding-left:2%;padding-right:2%;}
+    .miniContentBox>.leftSection>.imgSmall{margin-top:35%;}
+    .miniContentBox>.rightSection{width:67%; solid #ddd;}
+    .rightSection,.commentReply,.commentReply.asideBox{float:left;width:100%;}
+    .bigContentBox .span6.step1,.bigContentBox .span6.step2{width:100%;}
+    .searchPage .search.span9 .suggestedPeople li,.completeSignUp.span9 .suggestedPeople li,.people.span9 .suggestedPeople li{width:100% !important;}
+    
+}
+@media (max-width: 480px) {
+  .page-header h1 small {
+    display: block;
+    line-height: 18px;
+  }
+    .row-fluid .span4.signUpContainer,.mainSignUp{width:100%;}
+    .mainSignUp{margin-top:0% !important;}
+    .form-horizontal .control-group > label {
+    float: none;
+    width: auto;
+    padding-top: 0;
+    text-align: left;
+  }
+  .form-horizontal .controls {
+    margin-left: 0;
+  }
+  .form-horizontal .control-list {
+    padding-top: 0;
+  }
+  .form-horizontal .form-actions {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .feed .span6.feedContent{width:100%;}
+  .searchPage .search.span9, .completeSignUp.span9,.people.span9{width:100%;}
+  .searchPage .search.span9 .suggestedPeople li,.completeSignUp.span9 .suggestedPeople li,.people.span9 .suggestedPeople li{width:50%;}
+  
+  ul li.comment .rightSection {
+      box-sizing: border-box;
+  }
+  .miniContentBox>.leftSection{padding-left:2%;padding-right:2%;}
+  .miniContentBox>.leftSection>.imgSmall{margin-top:35%;}
+  .miniContentBox>.rightSection{width:67%; solid #ddd;}
+  .rightSection,.commentReply,.commentReply.asideBox{float:left;width:100%;}
+  .login .span6{width:100%;}
+  .login .mainSignUp{width:100%;}
+
+}
+
+@media (min-width:481px) and (max-width: 767px) {
+    body {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .row-fluid .span4.signUpContainer,.mainSignUp{width:100%;}
+    .mainSignUp{margin-top:0% !important;}
+    .navbar-fixed-top,
+    .navbar-fixed-bottom {
+        margin-right: -20px;
+        margin-left: -20px;
+    }
+    .container-fluid {
+        padding: 0;
+    }
+    .feed .span6.feedContent{width:100%;}
+    .searchPage .search.span9, .completeSignUp.span9,.people.span9{width:100%;}
+    .miniContentBox>.leftSection{padding-left:5%;padding-right:5%;}
+    .miniContentBox>.leftSection>.imgSmall{margin-top:35%;}
+    .miniContentBox>.rightSection{width:67%;}
+    
+    .searchPage .search.span9 .suggestedPeople li,.completeSignUp.span9 .suggestedPeople li,.people.span9 .suggestedPeople li{width:50%;}
+    .rightSection,.commentReply,.commentReply.asideBox{float:right;width:87%;}
+    
+  
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+
+    .container,
+    .navbar-fixed-top .container,
+    .navbar-fixed-bottom .container {
+        width: 724px;
+    }
+    .feed .span3.sideBarRight{width:30%;}
+    .feed .span6.feedContent{width:70%;}
+    .searchPage .search.span9{width:100%;}
+    .completeSignUp.span9,.people.span9{width:100%;}
+    .miniContentBox>.leftSection{padding-left:5%;padding-right:5%;}
+    .miniContentBox>.leftSection>.imgSmall{margin-top:35%;}
+    .miniContentBox>.rightSection{width:68%;}
+    .comment.link .rightSection .linkContent .rightSection{width:79%;float:right;}
+    .rightSection,.commentReply,.commentReply.asideBox{float:right;width:85.5%;}
+
+    .rightSectionWidget{width:67%;}
+
+}
+
+@media (max-width: 979px) {
+  body {
+    padding-top: 0;
+  }
+  .navbar-fixed-top,
+  .navbar-fixed-bottom {
+    position: static;
+  }
+  .navbar-fixed-top {
+    margin-bottom: 18px;
+  }
+  .navbar-fixed-bottom {
+    margin-top: 18px;
+  }
+  .navbar-fixed-top .navbar-inner,
+  .navbar-fixed-bottom .navbar-inner {
+    padding: 5px;
+  }
+  .navbar .container {
+    width: auto;
+    padding: 0;
+  }
+  .navbar .brand {
+    padding-right: 10px;
+    padding-left: 10px;
+    margin: 0 0 0 -5px;
+  }
+  .navbar-static .navbar-inner {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
+@media (min-width: 980px) {
+    .miniContentBox>.leftSection{padding-left:5%;padding-right:5%;}
+    .miniContentBox>.leftSection>.imgSmall{margin-top:35%;}
+    .miniContentBox>.rightSection{width:66%;}
+
+
+    .rightSection,.commentReply,.commentReply.asideBox{float:right;width:82%;}
+    .rightSectionWidget{width:69%;}
+
+}
+
+@media (min-width: 1200px) {
+
+  .container,
+  .navbar-fixed-top .container,
+  .navbar-fixed-bottom .container {
+    width: 1170px;
+  }
+  .miniContentBox>.leftSection{padding-left:5%;padding-right:5%;}
+  .miniContentBox>.leftSection>.imgSmall{margin-top:35%;}
+  .miniContentBox>.rightSection{width:68%;}
+  .rightSection,.commentReply,.commentReply.asideBox{float:right;width:86.5%;}
+  .rightSectionWidget{width:72%;}
+  
+}
+
+
+.sticky .navbarMain {
+	margin:0 auto;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;z-index:99999;
+}
+
+/*ie styles hack*/
+.miniContentBox>.leftSection{padding-left:5%\9;padding-right:5%\9;}
+.miniContentBox>.leftSection>.imgSmall{margin-top:35%\9;}
+.miniContentBox>.rightSection{width:68%\9;}
+.rightSection,.commentReply,.commentReply.asideBox{float:right;width:86.5%\9;}
+.rightSectionWidget{width:72%\9;}
