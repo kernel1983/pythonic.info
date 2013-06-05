@@ -7,7 +7,6 @@ import pickle
 import uuid
 import binascii
 import json
-
 import zlib
 #import gzip
 import hashlib
@@ -179,7 +178,7 @@ def get_comments(entity, user_ids = set()):
     entity_comments = entity.get("comments", [])
     for comment_id, comment in nomagic._get_entities_by_ids(entity.get("comment_ids", [])):
         comment["id"] = comment_id
-        comment["like_count"] = len(entity.get("likes", [])),
+        comment["like_count"] = len(comment.get("likes", [])),
         comment["comment_count"] = 0, #len(activity.get("comment_ids", [])),
         user_ids.add(comment["user_id"])
         if comment.get("comment_ids"):
