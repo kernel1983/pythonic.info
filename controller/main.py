@@ -16,23 +16,45 @@ from setting import settings
 from setting import conn
 
 import nomagic
+import nomagic.auth
 
 from controller.base import *
 
 
 class LoginHandler(BaseHandler):
     def get(self):
-        self.render('../templates/login.html')
+        self.render('../template/login.html')
 
-class SignupHandler(BaseHandler):
-    def get(self):
-        self.render('../templates/signup.html')
+    def post(self):
+        login = self.get_argument("login", None)
+        password = self.get_argument("password", None)
+
+        email = self.get_argument("email", None)
+        password1 = self.get_argument("password1", None)
+        password2 = self.get_argument("password2", None)
+
+        if login and password:
+            user_id, user = nomagic.auth.check_user(login, password)
+
+            self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
+            self.redirect("/login?status=login")
+            return
+
+        elif email and password1 and password2 and password1 == password2:
+            data = {"email": email, "password": password1}
+            user_id, user = nomagic.auth.create_user(data)
+
+            self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
+            self.redirect("/login?status=created")
+            return
+
+        self.redirect("/login?status=error")
 
 
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
-        self.redirect("/login")
+        self.redirect("/")
 
 
 class FeedHandler(BaseHandler):

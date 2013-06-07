@@ -80,23 +80,11 @@ class UserInfoAPIHandler(BaseHandler):
 
 class NewsFeedAPIHandler(BaseHandler):
     def get(self):
-        if not self.current_user:
-            #raise tornado.web.HTTPError(401, "User not login")
-            news_feeds = nomagic.feeds.get_public_news_feed()
-            users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds])))
+        news_feeds = nomagic.feeds.get_public_news_feed()
+        users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds])))
 
-            self.finish({"users": users,
-                        "news_feeds": news_feeds})
-
-            return
-
-        user_id = self.current_user["user_id"].encode("utf8")
-        news_feeds = nomagic.feeds.get_news_feed_by_user_id(user_id)
-        users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds]+[user_id])))
-
-        self.finish({"user_id": user_id,
-                     "users": users,
-                     "news_feeds": news_feeds})
+        self.finish({"users": users,
+                    "news_feeds": news_feeds})
 
 
 class NewsItemAPIHandler(BaseHandler):

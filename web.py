@@ -24,7 +24,7 @@ handlers = [
     (r"/", main.FeedHandler),
     (r"/item", main.ItemHandler),
 
-    (r"/signup", main.SignupHandler),
+    #(r"/signup", main.SignupHandler),
     (r"/login", main.LoginHandler),
     (r"/logout", main.LogoutHandler),
 
