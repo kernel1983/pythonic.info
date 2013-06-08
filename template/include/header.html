@@ -1,0 +1,8 @@
+    <div class="row" id="header">
+        <div class="text-left span10" >Pythonic Info | <a href="submit">submit</a></div>
+        {% if handler.current_user %}
+        <div class="text-right span1" ><a href="/logout">Logout</a></div>
+        {% else %}
+        <div class="text-right span1" ><a href="/login">Login</a></div>
+        {% end if %}
+    </div>

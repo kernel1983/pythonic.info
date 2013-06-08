@@ -1,9 +1,16 @@
+#header{
+    background-color: #ff6600;
+}
+#feeds{
+    background-color: #f6f6ef;
+}
+
+
 .topic{
 }
 .topic p{
-    margin-top: 10px;
     margin-left: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 .topic .gray{
     color: #ccc;

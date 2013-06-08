@@ -35,18 +35,21 @@ class LoginHandler(BaseHandler):
 
         if login and password:
             user_id, user = nomagic.auth.check_user(login, password)
-
-            self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
-            self.redirect("/login?status=login")
-            return
+            if user_id:
+                self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
+                self.redirect("/?status=login")
+                return
 
         elif email and password1 and password2 and password1 == password2:
             data = {"email": email, "password": password1}
-            user_id, user = nomagic.auth.create_user(data)
+            try:
+                user_id, user = nomagic.auth.create_user(data)
 
-            self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
-            self.redirect("/login?status=created")
-            return
+                self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
+                self.redirect("/?status=created")
+                return
+            except:
+                pass
 
         self.redirect("/login?status=error")
 
@@ -62,9 +65,9 @@ class FeedHandler(BaseHandler):
     <li id="feed-{{ id }}" class="topic">
         <p class="black">{{ content }}</p>
         <div class="gray">
-            <a class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
-            <a class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
-            <a class="" href="#"> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
+            <a href="/login" class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a href="/login" class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <a href="/login" class=""> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
             by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
             <a class="linkSep">|</a> <a class="reply" id="reply-{{ id }}" href="/item?id={{ id }}">discuss</a>
         </div>
@@ -97,9 +100,9 @@ class ItemHandler(BaseHandler):
     <li id="feed-{{ id }}" class="topic">
         <p class="black">{{ content }}</p>
         <div class="gray">
-            <a class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
-            <a class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
-            <a class="" href="#"> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
+            <a href="/login" class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a href="/login" class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <a href="/login" class=""> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
             by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
         </div>
         {% for comment in comments %}
