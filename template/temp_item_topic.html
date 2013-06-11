@@ -1,0 +1,23 @@
+    <li id="feed-{{ id }}" class="topic">
+        <p class="black">{{ content }}</p>
+        <div class="gray">
+            <a href="/login" class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a href="/login" class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <a href="/login" class=""> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
+            by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+        </div>
+
+        {% if handler.current_user %}
+        <div class="comment">
+            <form method="POST">
+                <textarea name="content" class="span5"></textarea><br/>
+                <input name="activity_id" type="hidden" value="{{ id }}" />
+                <input type="submit" value="POST" />
+            </form>
+        </div>
+        {% end if %}
+
+        {% for comment in comments %}
+            {% raw comment %}
+        {% end for %}
+    </li>

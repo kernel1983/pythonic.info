@@ -23,6 +23,8 @@ from controller import auth
 handlers = [
     (r"/", main.FeedHandler),
     (r"/item", main.ItemHandler),
+    (r"/submit", main.SubmitHandler),
+    (r"/comment", main.CommentHandler),
 
     #(r"/signup", main.SignupHandler),
     (r"/login", main.LoginHandler),

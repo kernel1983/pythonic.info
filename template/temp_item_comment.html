@@ -1,0 +1,14 @@
+    <div id="feed-{{ id }}" class="comment">
+        <div class="gray">
+            <a class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <span id="like-count-{{ id }}">{{ like_count }}</span> Likes by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+        </div>
+        <p class="black">{{ content }}</p>
+        <div class="gray">
+            <a class="reply" id="reply-{{ id }}">Reply</a>
+        </div>
+        {% for comment in comments %}
+            {% raw comment %}
+        {% end for %}
+    </div>
