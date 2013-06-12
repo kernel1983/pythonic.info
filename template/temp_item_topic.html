@@ -9,9 +9,9 @@
 
         {% if handler.current_user %}
         <div class="comment">
-            <form method="POST">
+            <form action="/comment" method="POST">
                 <textarea name="content" class="span5"></textarea><br/>
-                <input name="activity_id" type="hidden" value="{{ id }}" />
+                <input name="id" type="hidden" value="{{ id }}" />
                 <input type="submit" value="POST" />
             </form>
         </div>

@@ -106,7 +106,7 @@ class PostStatusAPIHandler(BaseHandler):
         content = self.get_argument("content").encode("utf8")
 
         data = {"content": content}
-        status_id, status = nomagic.new_status(user_id, data)
+        status_id, status = nomagic.feeds.new_status(user_id, data)
 
         self.finish(dict(status, id=status_id))
 
@@ -118,7 +118,7 @@ class LikeAPIHandler(BaseHandler):
         activity_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
 
-        likes = nomagic.like(user_id, activity_id)
+        likes = nomagic.feeds.like(user_id, activity_id)
         self.finish({"likes": likes, "like_count":len(likes)})
 
 class UnlikeAPIHandler(BaseHandler):
@@ -129,7 +129,7 @@ class UnlikeAPIHandler(BaseHandler):
         activity_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
 
-        likes = nomagic.unlike(user_id, activity_id)
+        likes = nomagic.feeds.unlike(user_id, activity_id)
         self.finish({"likes": likes, "like_count":len(likes)})
 
 class PostCommentAPIHandler(BaseHandler):
@@ -142,7 +142,7 @@ class PostCommentAPIHandler(BaseHandler):
         content = self.get_argument("content").encode("utf8")
 
         data = {"content": content}
-        comment_ids, new_comment = nomagic.new_comment(user_id, activity_id, data)
+        comment_ids, new_comment = nomagic.feeds.new_comment(user_id, activity_id, data)
 
         self.finish({"new_comment":new_comment, "comment_ids":comment_ids, "comment_count":len(comment_ids)})
 

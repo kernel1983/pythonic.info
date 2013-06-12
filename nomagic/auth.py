@@ -26,7 +26,8 @@ def create_user(user):
     user["type"] = "user"
     user["name"] = user.get("name", "")
     user["salt"] = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
-    user["password"] = hashlib.sha1(user["password"] + user["salt"]).hexdigest()
+    if "password" in user:
+        user["password"] = hashlib.sha1(user["password"] + user["salt"]).hexdigest()
     user["title"] = ""
     user["department"] = ""
     user["locatiion"] = ""
@@ -58,12 +59,6 @@ def update_user(user_id, data):
             result["password_updated"] = True
         del data["password0"]
         del data["password1"]
-
-    elif "password" in data and data["password"] != "":
-        #force update password
-        user["password"] = hashlib.sha1(data["password"] + user.get("salt", "")).hexdigest()
-        result["password_updated"] = True
-        del data["password"]
 
     if user:
         user.update(data)

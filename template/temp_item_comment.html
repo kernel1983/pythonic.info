@@ -6,7 +6,7 @@
         </div>
         <p class="black">{{ content }}</p>
         <div class="gray">
-            <a class="reply" id="reply-{{ id }}">Reply</a>
+            <a href="/comment?id={{ id }}" class="reply" id="reply-{{ id }}">Reply</a>
         </div>
         {% for comment in comments %}
             {% raw comment %}

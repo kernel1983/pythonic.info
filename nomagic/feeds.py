@@ -146,24 +146,30 @@ def get_news_by_id(activity_id):
     return dict(activity,
                 id = activity_id,
                 like_count = len(activity.get("likes", [])),
+                like = False,
                 comment_count = 0, #len(activity.get("comment_ids", [])),
                 comments = comments), user_ids
 
 
 def new_comment(user_id, entity_id, data):
+    entity = nomagic._get_entity_by_id(entity_id)
+
     data["type"] = "comment"
     data["likes"] = []
     data["user_id"] = user_id
     data["activity_id"] = entity_id
     data["datetime"] = datetime.datetime.now().isoformat()
     data["comment_ids"] = []
+    if entity["type"] == "comment":
+        data["activity_id"] = entity.get("activity_id")
+    else:
+        data["activity_id"] = entity_id
     #content valid
     assert data.get("content")
 
     new_comment_id = nomagic._new_key()
     assert ring[nomagic._number(new_comment_id)].execute_rowcount("INSERT INTO entities (id, body) VALUES(%s, %s)", new_comment_id, nomagic._pack(data))
 
-    entity = nomagic._get_entity_by_id(entity_id)
     comment_ids = entity.get("comment_ids", [])
     comment_ids.append(new_comment_id)
     entity["comment_ids"] = comment_ids

@@ -17,6 +17,7 @@ from setting import conn
 
 import nomagic
 import nomagic.auth
+import nomagic.feeds
 
 from controller.base import *
 
@@ -135,36 +136,49 @@ class ItemHandler(BaseHandler):
 class SubmitHandler(BaseHandler):
     def get(self):
         if not self.current_user:
-            raise HTTPError(401)
+            raise tornado.web.HTTPError(401, "User not login")
             return
 
-        self.activity_id = self.get_argument("id")
-        self.render("../template/html_comment.html")
+        user_id = self.current_user["user_id"].encode("utf8")
+        self.user = nomagic._get_entity_by_id(user_id)
+        self.render("../template/html_submit.html")
 
     def post(self):
         if not self.current_user:
-            raise HTTPError(401)
+            raise tornado.web.HTTPError(401, "User not login")
             return
 
         self.activity_id = self.get_argument("id")
-        self.render("/item?id=%s" % self.activity_id)
-
+        self.redirect("/item?id=%s" % self.activity_id)
 
 
 class CommentHandler(BaseHandler):
     def get(self):
         if not self.current_user:
-            raise HTTPError(401)
+            raise tornado.web.HTTPError(401, "User not login")
             return
 
-        self.activity_id = self.get_argument("id")
-        self.render("../template/html_comment.html")
+        self.activity_id = self.get_argument("id").encode("utf8")
+        user_id = self.current_user["user_id"].encode("utf8")
+        parent = nomagic._get_entity_by_id(self.activity_id)
+        assert parent["type"] in ["comment", "status"]
+        parent["like"] = user_id in parent["likes"]
+        parent["like_count"] = len(parent["likes"])
+
+        parent["user"] = nomagic._get_entity_by_id(user_id)
+        self.render("../template/html_comment.html", **parent)
+
 
     def post(self):
         if not self.current_user:
-            raise HTTPError(401)
+            raise tornado.web.HTTPError(401, "User not login")
             return
 
-        self.activity_id = self.get_argument("id")
-        self.render("/item?id=%s" % self.activity_id)
+        self.activity_id = self.get_argument("id").encode("utf8")
+        user_id = self.current_user["user_id"].encode("utf8")
+        content = self.get_argument("content").encode("utf8")
 
+        data = {"content": content}
+        comment_ids, new_comment = nomagic.feeds.new_comment(user_id, self.activity_id, data)
+
+        self.redirect("/item?id=%s" % new_comment.get("activity_id", ""))
