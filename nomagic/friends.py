@@ -2,10 +2,9 @@
 # -*- coding: utf8 -*-
 
 import __init__ as nomagic
-import auth
 
 from setting import conn
-from setting import ring
+import auth
 
 def follow_users(user_id, friend_ids):
     user = nomagic._get_entity_by_id(user_id)
@@ -62,3 +61,4 @@ def get_friends(user_ids):
         result.append(dict(friend, user_id=friend_id))
 
     return result
+
