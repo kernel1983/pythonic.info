@@ -38,7 +38,7 @@ def create_user(user):
     user["datetime"] = datetime.datetime.now().isoformat()
 
     new_id = nomagic._new_key()
-    assert nomagic.RING.get_node(new_id).execute_rowcount("INSERT INTO entities (id, body) VALUES(%s, %s)", new_id, nomagic._pack(user))
+    assert nomagic._node(new_id).execute_rowcount("INSERT INTO entities (id, body) VALUES(%s, %s)", new_id, nomagic._pack(user))
 
     #update indexes: email
     assert "@" in email
@@ -64,7 +64,7 @@ def update_user(user_id, data):
         user.update(data)
         user_json2 = nomagic._pack(user)
         if user_json1 != user_json2:
-            assert nomagic.RING.get_node(user_id).execute_rowcount("UPDATE entities SET body = %s WHERE id = %s", nomagic._pack(user), nomagic._key(user_id))
+            assert nomagic._node(user_id).execute_rowcount("UPDATE entities SET body = %s WHERE id = %s", nomagic._pack(user), nomagic._key(user_id))
     return result
 
 def check_user(login, password):
