@@ -56,17 +56,13 @@ class TestNoMagicFunctions(unittest.TestCase):
 
         nomagic.friends.follow_users(self.user_id, [new_user_id])
 
-    def _test_new_status(self):
+    def test_new_status(self):
         #old_activities = nomagic.feeds.get_news_feed_by_user_id(self.user_id)
         #for i in old_activities:
         #    nomagic.feeds.unlike(self.user_id, i["id"])
 
         #print old_activities
-        data = {"content":"mock content %s"%str(random.randint(100,1000000)), "user_id": self.user_id}
-        status = {
-             "content": "This is the content",
-             "user_id": self.user_id
-        }
+        data = {"title":"mock title %s"%str(random.randint(100,1000000)), "user_id": self.user_id}
 
         self.status_id, status = nomagic.feeds.new_status(self.user_id, data)
         nomagic.feeds.like(self.user_id, self.status_id)

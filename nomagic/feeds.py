@@ -78,7 +78,7 @@ def new_status(user_id, data):
     data["datetime"] = now.isoformat()
     data["likes"] = []
     data["comment_ids"] = []
-    assert data.get("content")
+    assert data.get("title")
 
     new_id = nomagic._new_key()
     assert nomagic._node(new_id).execute_rowcount("INSERT INTO entities (id, body) VALUES(%s, %s)", new_id, nomagic._pack(data))
@@ -123,7 +123,7 @@ def get_public_news_feed(activity_offset=10, activity_start_id=None):
     if activity_start_id:
         pass
     else:
-        posts = conn.query("SELECT * FROM index_posts ORDER BY id DESC LIMIT 0, %s", activity_offset)
+        posts = conn.query("SELECT * FROM index_posts ORDER BY rank DESC LIMIT 0, %s", activity_offset)
     activity_ids = [i["entity_id"] for i in posts]
 
     if posts:

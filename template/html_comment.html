@@ -13,7 +13,7 @@
     <!-- <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'> -->
 
     <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--link href="/static/css/bootstrap-responsive.css" rel="stylesheet"-->
     <link href="/static/css/design.css" rel="stylesheet">
 
 </head>
@@ -28,10 +28,17 @@
         <li id="feed-{{ id }}" class="topic">
             <p class="black">{{ content }}</p>
             <div class="gray">
+            {% if handler.current_user %}
+                <a href="#" class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+                <a href="#" class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+                <a href="#" class=""> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
+                by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+            {% else %}
                 <a href="/login" class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
                 <a href="/login" class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
                 <a href="/login" class=""> <span id="like-count-{{ id }}">{{ like_count }}</span> Likes</a>
                 by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+            {% end if %}
             </div>
 
             {% if handler.current_user %}
@@ -51,6 +58,9 @@
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+<script type="text/javascript" src="/static/js/coffee-script.js"></script>
+<script type="text/coffeescript" src="/static/coffee/pythonic.coffee"></script>
 
 </body>
 </html>

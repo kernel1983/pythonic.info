@@ -76,9 +76,11 @@ class FeedHandler(BaseHandler):
         html_topics = []
         for topic in news_feeds:
             topic["like_count"] = len(topic.get("likes", []))
-            topic["like"] = False
+            topic["like"] = self.user_id in set(topic.get("likes", [])) if self.current_user else False
             topic["comment_count"] = 0
             topic["user"] = self.users[topic["user_id"]]
+            topic["url"] = topic.get("url_cn") if topic.get("url_cn") else topic.get("url_en")
+            topic["handler"] = self
 
             html_topics.append(self.topic_temp.generate(**topic))
 
@@ -93,12 +95,9 @@ class ItemHandler(BaseHandler):
         html_comments = []
         for comment in comments:
             comment["like_count"] = len(comment.get("likes", []))
-            comment["like"] = False
+            comment["like"] = self.user_id in set(comment.get("likes", [])) if self.current_user else False
             comment["comment_count"] = 0
-            if comment.get("comment_ids"):
-                comment["comments"] = self.get_comments(comment["comments"])
-            else:
-                comment["comments"] = []
+            comment["comments"] = self.get_comments(comment["comments"]) if comment.get("comment_ids") else []
             comment["user"] = self.users[comment["user_id"]]
 
             html_comments.append(self.comment_temp.generate(**comment))
@@ -114,10 +113,11 @@ class ItemHandler(BaseHandler):
         data = dict(activity,
                     id = activity_id,
                     like_count = len(activity.get("likes", [])),
-                    like = False,
+                    like = self.user_id in set(activity.get("likes", [])) if self.current_user else False,
                     user = self.users[activity["user_id"]],
                     comment_count = 0, #len(activity.get("comment_ids", [])),
                     comments = self.get_comments(comments),
+                    url = activity.get("url_cn") if activity.get("url_cn") else activity.get("url_en"),
                     handler = self)
 
         return self.topic_temp.generate(**data)
@@ -136,7 +136,7 @@ class ItemHandler(BaseHandler):
 class SubmitHandler(BaseHandler):
     def get(self):
         if not self.current_user:
-            raise tornado.web.HTTPError(401, "User not login")
+            self.redirect("/login")
             return
 
         user_id = self.current_user["user_id"].encode("utf8")
@@ -148,9 +148,22 @@ class SubmitHandler(BaseHandler):
             raise tornado.web.HTTPError(401, "User not login")
             return
 
-        self.activity_id = self.get_argument("id")
-        self.redirect("/item?id=%s" % self.activity_id)
+        self.title = self.get_argument("title")
+        self.url_cn = self.get_argument("url_cn", "")
+        self.url_en = self.get_argument("url_en", "")
+        self.content = self.get_argument("content", "")
+        self.user_id = self.current_user.get("user_id", u"").encode("utf8")
 
+        if (self.url_en or self.url_cn) or self.content:
+            data = {
+                "title": self.title,
+                "content": self.content,
+                "url_en": self.url_en, "url_cn": self.url_cn,
+                "user_id": self.user_id}
+            self.status_id, status = nomagic.feeds.new_status(self.user_id, data)
+            self.redirect("/")
+        else:
+            self.redirect("/submit")
 
 class CommentHandler(BaseHandler):
     def get(self):
