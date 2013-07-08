@@ -12,6 +12,8 @@ import tornado.template
 import tornado.database
 import tornado.auth
 
+import markdown2
+
 from setting import settings
 from setting import conn
 
@@ -99,6 +101,7 @@ class ItemHandler(BaseHandler):
             comment["comment_count"] = 0
             comment["comments"] = self.get_comments(comment["comments"]) if comment.get("comment_ids") else []
             comment["user"] = self.users[comment["user_id"]]
+            comment["content"] = markdown2.markdown(comment["content"])
 
             html_comments.append(self.comment_temp.generate(**comment))
 
@@ -121,6 +124,7 @@ class ItemHandler(BaseHandler):
                     comment_count = 0, #len(activity.get("comment_ids", [])),
                     comments = self.get_comments(comments),
                     url = url,
+                    content = markdown2.markdown(activity["content"]),
                     handler = self)
 
         return self.topic_temp.generate(**data)

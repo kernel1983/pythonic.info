@@ -4,7 +4,7 @@
             <a href="{{ url }}" target="blank">{{ title }}</a>
         {% else %}
             <a href="/item?id={{ id }}">{{ title }}</a>
-            <p class="">{{ content }}</p>
+            <p class="">{% raw content %}</p>
         {% end if %}
         </div>
         <div class="info">

@@ -6,7 +6,7 @@
             <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
             <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
         </div>
-        <p class="">{{ content }}</p>
+        <p class="">{% raw content %}</p>
         <div class="info">
             <a href="/comment?id={{ id }}" class="reply" id="reply-{{ id }}">Reply</a>
         </div>
