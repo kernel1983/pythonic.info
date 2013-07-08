@@ -44,7 +44,7 @@
         <div class="gray">
             <a class="unlike <%= like ? "" : "hide" %>" id="unlike-<%= id %>"><i class="icon icon-thumbs-down"></i></a>
             <a class="like <%= like ? "hide" : "" %>" id="like-<%= id %>"><i class="icon icon-thumbs-up"></i></a>
-            <span id="like-count-<%= id %>"><%= like_count %></span> Likes</a> by <a href="#" class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+            <span id="count-like-<%= id %>"><%= like_count %></span> Likes</a> by <a href="#" class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
             <a class="linkSep">|</a> <a class="reply" id="reply-<%= id %>">Reply</a>
         </div>
 
@@ -57,7 +57,7 @@
         <div class="gray">
             <a class="unlike <%= like ? "" : "hide" %>" id="unlike-<%= id %>"><i class="icon icon-thumbs-down"></i></a>
             <a class="like <%= like ? "hide" : "" %>" id="like-<%= id %>"><i class="icon icon-thumbs-up"></i></a>
-            <span id="like-count-<%= id %>"><%= like_count %></span> Likes by <a href="#" class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+            <span id="count-like-<%= id %>"><%= like_count %></span> Likes by <a href="#" class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
         </div>
         <p class="black"><%= content %></p>
         <div class="gray">

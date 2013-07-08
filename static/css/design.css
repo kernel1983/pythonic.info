@@ -1,21 +1,35 @@
+a {
+    color: black;
+}
+
+a:visited {
+    color: gray;
+}
+
 #header{
     background-color: #ff6600;
 }
-#feeds{
-    background-color: #f6f6ef;
+#header a:visited {
+    color: black;
 }
 
+#feeds{
+    background-color: #f6f6ef;
+    padding-top: 10px;
+}
 
 .topic{
 }
+
 .topic p{
     margin-left: 10px;
     margin-bottom: 20px;
 }
-.topic .gray{
+.topic .info{
     color: #ccc;
+    margin-top: 0px;
     margin-left: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .comment{
@@ -28,13 +42,14 @@
     margin-left: 20px;
     margin-bottom: 5px;
 }
-.comment .gray{
+.comment .info{
     color: #ccc;
     margin-left: 20px;
     margin-bottom: 0px;
 }
 
-.black{
-    color: #000;
+.title{
+    color: black;
     font-size: 14px;
+    margin-top: 5px;
 }

@@ -42,9 +42,10 @@
     <li id="feed-<%= id %>" class="topic">
         <p class="black"><%= content %></p>
         <div class="gray">
-            <a class="unlike <%= like ? "" : "hide" %>" id="unlike-<%= id %>"><i class="icon icon-thumbs-down"></i></a>
-            <a class="like <%= like ? "hide" : "" %>" id="like-<%= id %>"><i class="icon icon-thumbs-up"></i></a>
-            <a class="" href="#"> <span id="like-count-<%= id %>"><%= like_count %></span> Likes</a>
+            <a href="#" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a href="#" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <a href="#" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
+            <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
             by <a href="#" class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
             <a class="linkSep">|</a> <a class="reply" id="reply-<%= id %>" href="/item?id=<%= id %>">discuss</a>
         </div>
@@ -56,7 +57,7 @@
 <script type="text/template" id="feed-comment-template">
     <li id="feed-<%= id %>" class="comment">
         <div class="gray">
-            <a class="" href="#"><i class="icon icon-thumbs-up"></i></i> <span id="like-count-<%= id %>"><%= like_count %></span> Likes</a> by <a href="#" class="username"><%= user["name"] %></a> <span class="userAction">said </span><abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+            <a class="" href="#"><i class="icon icon-thumbs-up"></i></i> <span id="count-like-<%= id %>"><%= like_count %></span> Likes</a> by <a href="#" class="username"><%= user["name"] %></a> <span class="userAction">said </span><abbr class="timeago postTime" title="<%= datetime %>"></abbr>
         </div>
         <p class="black"><%= content %></p>
         <div class="gray">

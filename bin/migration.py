@@ -5,6 +5,7 @@ import binascii
 import json
 import zlib
 
+sys.path.append(".")
 sys.path.append("..")
 
 from setting import settings

@@ -1,11 +1,13 @@
     <div id="feed-{{ id }}" class="comment">
-        <div class="gray">
-            <a class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
-            <a class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
-            <span id="like-count-{{ id }}">{{ like_count }}</span> Likes by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+        <div class="info">
+            <a href="#" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a href="#" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <a href="#" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
+            <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
+            <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
         </div>
-        <p class="black">{{ content }}</p>
-        <div class="gray">
+        <p class="">{{ content }}</p>
+        <div class="info">
             <a href="/comment?id={{ id }}" class="reply" id="reply-{{ id }}">Reply</a>
         </div>
         {% for comment in comments %}

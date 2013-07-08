@@ -108,7 +108,10 @@ class ItemHandler(BaseHandler):
         activity = nomagic._get_entity_by_id(activity_id)
         activity["id"] = activity_id
         comments, user_ids = nomagic.feeds.get_comments(activity)
+        user_ids.add(activity["user_id"])
         self.users = dict(nomagic._get_entities_by_ids(user_ids))
+        url = activity.get("url_cn") if activity.get("url_cn") else activity.get("url_en")
+        #url = url if url else "/item?id=%s" % activity.get("id")
 
         data = dict(activity,
                     id = activity_id,
@@ -117,7 +120,7 @@ class ItemHandler(BaseHandler):
                     user = self.users[activity["user_id"]],
                     comment_count = 0, #len(activity.get("comment_ids", [])),
                     comments = self.get_comments(comments),
-                    url = activity.get("url_cn") if activity.get("url_cn") else activity.get("url_en"),
+                    url = url,
                     handler = self)
 
         return self.topic_temp.generate(**data)
