@@ -1,8 +1,10 @@
     <div class="row" id="header">
-        <div class="text-left span10" ><a href="/"><b>Pythonic Info</b></a> | <a href="submit">submit</a></div>
+        <div class="text-left span9" ><a href="/"><b>Pythonic Info</b></a> | <a href="submit">submit</a></div>
         {% if handler.current_user %}
+        <div class="text-right span1" ><a href="/setting">Setting</a></div>
         <div class="text-right span1" ><a href="/logout">Logout</a></div>
         {% else %}
+        <div class="text-right span1" ></div>
         <div class="text-right span1" ><a href="/login">Login</a></div>
         {% end if %}
     </div>

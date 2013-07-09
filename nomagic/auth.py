@@ -52,7 +52,7 @@ def update_user(user_id, data):
     user_json1 = nomagic._pack(user)
     result = {}
 
-    if "password0" in data and "password1" in data and data["password0"] != data["password1"] and data["password1"] != "":
+    if "password0" in data and "password1" in data and data["password0"] != data["password1"] and data["password1"]:
         #normal update password with old password0 and new password1
         if user["password"] == hashlib.sha1(data["password0"] + user.get("salt", "")).hexdigest():
             user["password"] = hashlib.sha1(data["password1"] + user.get("salt", "")).hexdigest()

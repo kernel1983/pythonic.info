@@ -16,7 +16,7 @@ import string
 import __init__ as nomagic
 
 from setting import conn
-
+import auth
 
 def email_invite(email):
     """email invite can be used for both self signup and inviting friends to join"""
@@ -39,7 +39,7 @@ def follow_users(user_id, friend_ids):
             if user_id not in followed:
                 followed.append(user_id)
                 friend["followed"] = followed
-            update_user(friend_id, friend)
+            auth.update_user(friend_id, friend)
             following.append(friend_id)
             changed = True
 
@@ -50,7 +50,7 @@ def follow_users(user_id, friend_ids):
     if changed:
         user["following"] = following
         user["suggested_friend_ids"] = suggested_friend_ids
-        update_user(user_id, user)
+        auth.update_user(user_id, user)
     #followed = user.get("followed", [])
 
 def unfollow_users(user_id, friend_ids):
@@ -64,11 +64,11 @@ def unfollow_users(user_id, friend_ids):
                 followed.remove(user_id)
                 friend["followed"] = followed
 
-                update_user(friend_id, friend)
+                auth.update_user(friend_id, friend)
             following.remove(friend_id)
 
     user["following"] = following
-    update_user(user_id, user)
+    auth.update_user(user_id, user)
 
 
 def new_status(user_id, data):

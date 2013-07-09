@@ -25,6 +25,40 @@ from controller.base import *
 
 loader = tornado.template.Loader(os.path.join(os.path.dirname(__file__), "../template/"))
 
+class SettingHandler(BaseHandler):
+    def get(self):
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        user_id = self.current_user["user_id"].encode("utf8")
+        self.user = nomagic._get_entity_by_id(user_id)
+        self.render('../template/setting.html')
+
+    def post(self):
+        if self.current_user:
+            user_id = self.current_user["user_id"].encode("utf8")
+            self.user = nomagic._get_entity_by_id(user_id)
+
+            name = self.get_argument("name", None)
+            if name:
+                post_data = {}
+                post_data["name"] = name
+                nomagic.auth.update_user(user_id, post_data)
+
+            password0 = self.get_argument("password0", None)
+            password1 = self.get_argument("password1", None)
+            password2 = self.get_argument("password2", None)
+            if password0 is not None and password1 is not None and password1 == password2:
+                post_data = {}
+                post_data["password0"] = password0
+                post_data["password1"] = password1
+                nomagic.auth.update_user(user_id, post_data)
+                self.redirect("/setting?status=password_updated")
+                return
+
+        self.redirect("/setting")
+
 
 class LoginHandler(BaseHandler):
     def get(self):
@@ -175,7 +209,7 @@ class SubmitHandler(BaseHandler):
 class CommentHandler(BaseHandler):
     def get(self):
         if not self.current_user:
-            raise tornado.web.HTTPError(401, "User not login")
+            self.redirect("/login")
             return
 
         self.activity_id = self.get_argument("id").encode("utf8")

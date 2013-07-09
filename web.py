@@ -31,7 +31,7 @@ handlers = [
     (r"/submit", main.SubmitHandler),
     (r"/comment", main.CommentHandler),
 
-    #(r"/signup", main.SignupHandler),
+    (r"/setting", main.SettingHandler),
     (r"/login", main.LoginHandler),
     (r"/logout", main.LogoutHandler),
 
