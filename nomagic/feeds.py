@@ -121,7 +121,8 @@ def get_news_feed_by_user_id(user_id, activity_offset=0, activity_start_id=None)
 
 def get_public_news_feed(activity_offset=10, activity_start_id=None):
     if activity_start_id:
-        pass
+        last_post = conn.get("SELECT * FROM index_posts WHERE entity_id = %s", activity_start_id)
+        posts = conn.query("SELECT * FROM index_posts WHERE rank < %s ORDER BY rank DESC LIMIT 0, %s", last_post["rank"], activity_offset)
     else:
         posts = conn.query("SELECT * FROM index_posts ORDER BY rank DESC LIMIT 0, %s", activity_offset)
     activity_ids = [i["entity_id"] for i in posts]

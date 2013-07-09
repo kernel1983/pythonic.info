@@ -4,7 +4,7 @@
             <a href="#" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
             <a href="#" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
             <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
-            <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+            by <a class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
         </div>
         <p class="">{% raw content %}</p>
         <div class="info">

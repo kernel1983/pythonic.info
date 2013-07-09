@@ -107,9 +107,11 @@ class FeedHandler(BaseHandler):
         if self.current_user:
             self.user_id = self.current_user.get("user_id", u"").encode("utf8")
 
-        news_feeds = nomagic.feeds.get_public_news_feed()
+        from_id = self.get_argument("from", None)
+        news_feeds = nomagic.feeds.get_public_news_feed(activity_start_id = from_id)
         self.users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds])))
 
+        self.more_id = None
         html_topics = []
         for topic in news_feeds:
             topic["like_count"] = len(topic.get("likes", []))
@@ -119,6 +121,7 @@ class FeedHandler(BaseHandler):
             topic["url"] = topic.get("url_cn") if topic.get("url_cn") else topic.get("url_en")
             topic["handler"] = self
             topic["_"] = self.locale.translate
+            self.more_id = topic["id"]
 
             html_topics.append(self.topic_temp.generate(**topic))
 

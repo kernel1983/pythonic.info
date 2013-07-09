@@ -28,6 +28,14 @@
         {% for content in topics %}
         {% raw content %}
         {% end for %}
+
+        {% if not topics %}
+        <a href="/">No more</a>
+        {% end if %}
+
+        {% if handler.more_id %}
+        <a href="/?from={{ handler.more_id }}">More</a>
+        {% end if %}
     </div>
 </div>
 
