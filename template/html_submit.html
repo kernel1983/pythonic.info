@@ -27,13 +27,13 @@
     <div class="row" id="feeds">
         <form method="POST">
             <br/>
-            <label class="span2">English URL</label><input name="url_en" class="span5" /><br/><br/>
-            <label class="span2">Chinese URL</label><input name="url_cn" class="span5" /><br/><br/>
-            <label class="span2">(One or both)</label><br/><br/><br/><br/>
-            <label class="span2">Title</label><input name="title" class="span5" /><br/><br/>
-            <label class="span2">Content</label><textarea name="content" class="span5"></textarea><br/>
+            <label class="span2">{{_('English URL')}}</label><input name="url_en" class="span5" /><br/><br/>
+            <label class="span2">{{_('Chinese URL')}}</label><input name="url_cn" class="span5" /><br/><br/>
+            <label class="span6">{{_('(One or both, or just fill in Content)')}}</label><br/><br/><br/><br/>
+            <label class="span2">{{_('Title')}}</label><input name="title" class="span5" /><br/><br/>
+            <label class="span2">{{_('Content')}}</label><textarea name="content" class="span5"></textarea><br/>
             <input name="activity_id" type="hidden" value="{{ id }}" />
-            <label class="span2"></label><input type="submit" value="POST" />
+            <label class="span2"></label><input type="submit" value="{{_('Post')}}" />
         </form>
     </div>
 </div>

@@ -31,14 +31,14 @@
             {% if handler.current_user %}
                 <a href="#" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
                 <a href="#" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
-                <a href="#" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
-                <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> Likes</a>
-                by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+                <a href="#" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
+                <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
+                by <a class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
             {% else %}
                 <a href="/login" class="unlike {{ "" if like else "hide" }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
                 <a href="/login" class="like {{ "hide" if like else "" }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
-                <a href="/login" class=""> <span>{{ like_count }}</span> Likes</a>
-                by <a href="#" class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
+                <a href="/login" class=""> <span>{{ like_count }}</span> {{_('Likes')}}</a>
+                by <a class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
             {% end if %}
             </div>
 
@@ -47,7 +47,7 @@
                 <form method="POST">
                     <textarea name="content" class="span5"></textarea><br/>
                     <input name="activity_id" type="hidden" value="{{ id }}" />
-                    <input type="submit" value="POST" />
+                    <input type="submit" value="{{_('Post')}}" />
                 </form>
             </div>
             {% end if %}

@@ -1,6 +1,7 @@
 import urllib
 
 import tornado.web
+import tornado.locale
 from tornado import httpclient
 
 from vendor.amazon_ses import AmazonSES
@@ -17,6 +18,13 @@ class BaseHandler(tornado.web.RequestHandler):
         user_json = self.get_secure_cookie("user")
         if not user_json: return None
         return tornado.escape.json_decode(user_json)
+
+    def get_access_token(self):
+        return None
+
+    def get_user_locale(self):
+        return None
+
 
 class EmailHandler(AmazonSES):
     def send(self, from_email, user_email, user_msg):
@@ -37,7 +45,4 @@ class EmailHandler(AmazonSES):
         client = httpclient.AsyncHTTPClient()
         req = httpclient.HTTPRequest("https://email.us-east-1.amazonaws.com/", "POST", self._getHeaders(), params)
         client.fetch(req, self.async_callback(self.handle_email))
-
-
-
 

@@ -11,6 +11,7 @@ import tornado.web
 import tornado.template
 import tornado.database
 import tornado.auth
+import tornado.locale
 
 import markdown2
 
@@ -117,6 +118,7 @@ class FeedHandler(BaseHandler):
             topic["user"] = self.users[topic["user_id"]]
             topic["url"] = topic.get("url_cn") if topic.get("url_cn") else topic.get("url_en")
             topic["handler"] = self
+            topic["_"] = self.locale.translate
 
             html_topics.append(self.topic_temp.generate(**topic))
 
@@ -135,7 +137,8 @@ class ItemHandler(BaseHandler):
             comment["comment_count"] = 0
             comment["comments"] = self.get_comments(comment["comments"]) if comment.get("comment_ids") else []
             comment["user"] = self.users[comment["user_id"]]
-            comment["content"] = markdown2.markdown(comment["content"])
+            comment["content"] = markdown2.markdown(comment["content"], safe_mode=True)
+            comment["_"] = self.locale.translate
 
             html_comments.append(self.comment_temp.generate(**comment))
 
@@ -158,7 +161,8 @@ class ItemHandler(BaseHandler):
                     comment_count = 0, #len(activity.get("comment_ids", [])),
                     comments = self.get_comments(comments),
                     url = url,
-                    content = markdown2.markdown(activity["content"]),
+                    content = markdown2.markdown(activity["content"], safe_mode=True),
+                    _ = self.locale.translate,
                     handler = self)
 
         return self.topic_temp.generate(**data)
