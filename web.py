@@ -31,6 +31,7 @@ handlers = [
     (r"/item", main.ItemHandler),
     (r"/submit", main.SubmitHandler),
     (r"/comment", main.CommentHandler),
+    (r"/verify_email", main.VerifyEmailHandler),
 
     (r"/setting", main.SettingHandler),
     (r"/login", main.LoginHandler),

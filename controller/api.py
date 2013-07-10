@@ -12,6 +12,8 @@ import tornado.web
 import tornado.httpclient as httpclient
 
 from PIL import Image
+from tornado_ses import EmailHandler
+from amazon_ses import EmailMessage
 
 import nomagic
 import nomagic.feeds
@@ -19,9 +21,6 @@ import nomagic.feeds
 from setting import conn
 
 from controller.base import BaseHandler
-from controller.base import EmailHandler
-
-from vendor.amazon_ses import EmailMessage
 
 
 ##### mock data API #####
@@ -53,9 +52,9 @@ class SignupAPIHandler(BaseHandler, EmailHandler):
 
         #send email
         msg = EmailMessage()
-        msg.subject = u"Confirm from Project"
-        msg.bodyText= u"http://www.com:8000/email_verify?token=%s" % token
-        self.send("no-reply@appkungfu.net", email, msg)
+        msg.subject = u"Confirm email from Pythonic Info"
+        msg.bodyText= u"http://pythonic.info:8000/verify_email?token=%s" % token
+        self.send("info@pythonic.info", email, msg)
         self.finish({})
 
 class UserInfoAPIHandler(BaseHandler):
@@ -191,3 +190,6 @@ class UnfollowAPIHandler(BaseHandler):
         friend_ids = self.get_argument("friend_ids").encode("utf8").split(",")
         nomagic.unfollow_users(user_id, friend_ids)
 
+class ResendVerifyEmailAPIHandler(BaseHandler):
+    def post(self):
+        self.verify_code = self.get_argument("verify_code")

@@ -3,6 +3,8 @@ import os
 import logging
 import cgi
 import json
+import random
+import string
 
 import tornado.options
 import tornado.ioloop
@@ -14,6 +16,8 @@ import tornado.auth
 import tornado.locale
 
 import markdown2
+from tornado_ses import EmailHandler
+from amazon_ses import EmailMessage
 
 from setting import settings
 from setting import conn
@@ -61,7 +65,7 @@ class SettingHandler(BaseHandler):
         self.redirect("/setting")
 
 
-class LoginHandler(BaseHandler):
+class LoginHandler(BaseHandler, EmailHandler):
     def get(self):
         self.render('../template/login.html')
 
@@ -86,6 +90,17 @@ class LoginHandler(BaseHandler):
                 user_id, user = nomagic.auth.create_user(data)
 
                 self.set_secure_cookie("user", tornado.escape.json_encode({"user_id": user_id}))
+
+                email_verify_code = ''.join(random.choice(string.digits+string.letters) for x in range(14))
+                result = nomagic.auth.update_user(user_id, {"email_verified": False, "email_verify_code": email_verify_code})
+
+                #send verify email here
+                msg = EmailMessage()
+                msg.subject = "Confirm Email from Pythonic Info"
+                msg.bodyText= "http://pythonic.info:8000/verify_email?user_id=%s&verify_code=%s" % (user_id, email_verify_code)
+                self.send("info@pythonic.info", str(email), msg)
+                print "url:", msg.bodyText
+
                 self.redirect("/?status=created")
                 return
             except:
@@ -243,3 +258,18 @@ class CommentHandler(BaseHandler):
         comment_ids, new_comment = nomagic.feeds.new_comment(user_id, self.activity_id, data)
 
         self.redirect("/item?id=%s" % new_comment.get("activity_id", ""))
+
+class VerifyEmailHandler(BaseHandler):
+    def get(self):
+        user_id = self.get_argument("user_id").encode("utf8")
+        email_verify_code = self.get_argument("verify_code")
+        self.user = nomagic._get_entity_by_id(user_id)
+
+        self.verified = False
+        if self.user.get("email_verify_code") == email_verify_code:
+            result = nomagic.auth.update_user(user_id, {"email_verified": True})
+            self.verified = True
+
+        #self.write("done! " + str(self.verified))
+        self.render('../template/verify_email.html')
+

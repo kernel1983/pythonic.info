@@ -4,11 +4,8 @@ import tornado.web
 import tornado.locale
 from tornado import httpclient
 
-from vendor.amazon_ses import AmazonSES
-
-from vendor.amazon_ses import EmailMessage
-
-from vendor.BeautifulSoup import BeautifulSoup
+from amazon_ses import AmazonSES
+from amazon_ses import EmailMessage
 
 from setting import settings
 
@@ -25,7 +22,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_user_locale(self):
         return None
 
-
+"""
 class EmailHandler(AmazonSES):
     def send(self, from_email, user_email, user_msg):
         AmazonSES.__init__(self, settings["AmazonAccessKeyID"], settings["AmazonSecretAccessKey"])
@@ -45,4 +42,4 @@ class EmailHandler(AmazonSES):
         client = httpclient.AsyncHTTPClient()
         req = httpclient.HTTPRequest("https://email.us-east-1.amazonaws.com/", "POST", self._getHeaders(), params)
         client.fetch(req, self.async_callback(self.handle_email))
-
+"""

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pythonic Info Login</title>
+    <title>Pythonic Info Email Verify</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,25 +28,16 @@
 <div class="container" role="main">
     {% include "../template/include/header.html" %}
     <div class="row" id="feeds">
-        <div class="span4">
-            <form method="POST">
-                <h1 class="">{{_('Login')}}</h1>
-                <br/>
-                <input id="login" name="login" type="email" placeholder="{{_('Email')}}" />
-                <input id="password" name="password" type="password" placeholder="{{_('Password')}}" />
-                <br/>
-                <input id="login_button" type="submit" value="{{_('Login')}}" />
-            </form>
-            <hr/>
-            <form method="POST">
-                <h1 class="">{{_('Signup')}}</h1>
-                <br/>
-                <input id="email" name="email" type="email" placeholder="{{_('Email')}}" />
-                <input id="password1" name="password1" type="password" placeholder="{{_('Password')}}" />
-                <input id="password2" name="password2" type="password" placeholder="{{_('Password Again')}}" />
-                <br/>
-                <input id="signup_button" type="submit" value="{{_('Signup')}}" />
-            </form>
+        <div class="span6">
+            <br /><br /><br /><br />
+            {% if handler.verified %}
+                Email verify success!
+            {% else %}
+                Email verify failed!
+            {% end if %}
+            <br /><br /><br /><br />
+            <br /><br /><br /><br />
+            <br /><br /><br /><br />
         </div>
     </div>
 </div>
