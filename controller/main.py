@@ -74,6 +74,7 @@ class LoginHandler(BaseHandler, EmailHandler):
         password = self.get_argument("password", None)
 
         email = self.get_argument("email", None)
+        name = self.get_argument("name", None)
         password1 = self.get_argument("password1", None)
         password2 = self.get_argument("password2", None)
 
@@ -84,8 +85,8 @@ class LoginHandler(BaseHandler, EmailHandler):
                 self.redirect("/?status=login")
                 return
 
-        elif email and password1 and password2 and password1 == password2:
-            data = {"email": email, "password": password1}
+        elif email and name and password1 and password2 and password1 == password2:
+            data = {"email": email, "name": name, "password": password1}
             try:
                 user_id, user = nomagic.auth.create_user(data)
 
@@ -140,6 +141,7 @@ class FeedHandler(BaseHandler):
 
             html_topics.append(self.topic_temp.generate(**topic))
 
+        self.set_header("Cache-Control", "max-age=900")
         self.render("../template/html_feed.html", topics=html_topics)
 
 
@@ -193,6 +195,7 @@ class ItemHandler(BaseHandler):
         news_feed, user_ids = nomagic.feeds.get_news_by_id(self.activity_id)
 
         content = self.get_news_by_id(self.activity_id)
+        self.set_header("Cache-Control", "max-age=3600")
         self.render("../template/html_item.html", content=content)
 
 

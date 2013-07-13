@@ -1,5 +1,5 @@
 CREATE TABLE `index_posts` (
-  `rank` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `rank` bigint(20) unsigned NOT NULL DEFAULT '287174588',
   `entity_id` char(32) NOT NULL DEFAULT '',
   `user_id` char(32) NOT NULL DEFAULT '',
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
