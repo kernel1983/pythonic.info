@@ -11,6 +11,7 @@ import StringIO
 import tornado.web
 import tornado.httpclient as httpclient
 
+import markdown2
 from PIL import Image
 from tornado_ses import EmailHandler
 from amazon_ses import EmailMessage
@@ -53,7 +54,7 @@ class SignupAPIHandler(BaseHandler, EmailHandler):
         #send email
         msg = EmailMessage()
         msg.subject = u"Confirm email from Pythonic Info"
-        msg.bodyText= u"http://pythonic.info:8000/verify_email?token=%s" % token
+        msg.bodyText= u"http://pythonic.info/verify_email?token=%s" % token
         self.send("info@pythonic.info", email, msg)
         self.finish({})
 
@@ -77,24 +78,37 @@ class UserInfoAPIHandler(BaseHandler):
         self.finish({"result":"error"})
 
 
-class NewsFeedAPIHandler(BaseHandler):
+class FeedAPIHandler(BaseHandler):
     def get(self):
-        news_feeds = nomagic.feeds.get_public_news_feed()
-        users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds])))
+        self.set_header("Cache-Control", "max-age=0")
+        if not self.current_user:
+            raise tornado.web.HTTPError(401, "User not login")
 
-        self.finish({"users": users,
-                    "news_feeds": news_feeds})
+        feeds = nomagic.feeds.get_public_feed()
+        users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in feeds])))
+
+        self.finish({"users": users, "feeds": feeds})
 
 
-class NewsItemAPIHandler(BaseHandler):
+class ItemAPIHandler(BaseHandler):
+    def get_comments(self, comments):
+        for comment in comments:
+            comment["comments"] = self.get_comments(comment["comments"]) if comment.get("comment_ids") else []
+            comment["content"] = markdown2.markdown(comment["content"], safe_mode=True)
+        return comments
+
     def get(self):
-        activity_id = self.get_argument("id")
+        self.set_header("Cache-Control", "max-age=0")
+        if not self.current_user:
+            raise tornado.web.HTTPError(401, "User not login")
+
+        entity_id = self.get_argument("id")
         #user_id = self.current_user["user_id"].encode("utf8")
-        news_feed, user_ids = nomagic.feeds.get_news_by_id(activity_id)
+        item, user_ids = nomagic.feeds.get_item_by_id(entity_id)
+        item["comments"] = self.get_comments(item["comments"])
         users = dict(nomagic._get_entities_by_ids(user_ids))
 
-        self.finish({"users": users,
-                     "news_feeds": [news_feed]})
+        self.finish({"users": users, "item": item})
 
 class PostStatusAPIHandler(BaseHandler):
     def post(self):

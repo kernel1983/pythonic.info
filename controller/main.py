@@ -120,11 +120,12 @@ class FeedHandler(BaseHandler):
     topic_temp = loader.load("temp_feed_topic.html")
 
     def get(self):
+        self.user_id = ""
         if self.current_user:
             self.user_id = self.current_user.get("user_id", u"").encode("utf8")
 
         from_id = self.get_argument("from", None)
-        news_feeds = nomagic.feeds.get_public_news_feed(activity_start_id = from_id)
+        news_feeds = nomagic.feeds.get_public_feed(item_start_id = from_id)
         self.users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds])))
 
         self.more_id = None
@@ -164,37 +165,37 @@ class ItemHandler(BaseHandler):
 
         return html_comments
 
-    def get_news_by_id(self, activity_id):
-        activity = nomagic._get_entity_by_id(activity_id)
-        activity["id"] = activity_id
-        comments, user_ids = nomagic.feeds.get_comments(activity)
-        user_ids.add(activity["user_id"])
+    def get_item_by_id(self, item_id):
+        item = nomagic._get_entity_by_id(item_id)
+        comments, user_ids = nomagic.feeds.get_comments(item)
+        user_ids.add(item["user_id"])
         self.users = dict(nomagic._get_entities_by_ids(user_ids))
-        url = activity.get("url_cn") if activity.get("url_cn") else activity.get("url_en")
-        #url = url if url else "/item?id=%s" % activity.get("id")
+        url = item.get("url_cn") if item.get("url_cn") else item.get("url_en")
+        #url = url if url else "/item?id=%s" % item.get("id")
 
-        data = dict(activity,
-                    id = activity_id,
-                    like_count = len(activity.get("likes", [])),
-                    like = self.user_id in set(activity.get("likes", [])) if self.current_user else False,
-                    user = self.users[activity["user_id"]],
-                    comment_count = 0, #len(activity.get("comment_ids", [])),
+        data = dict(item,
+                    id = item_id,
+                    like_count = len(item.get("likes", [])),
+                    like = self.user_id in set(item.get("likes", [])) if self.current_user else False,
+                    user = self.users[item["user_id"]],
+                    comment_count = 0, #len(item.get("comment_ids", [])),
                     comments = self.get_comments(comments),
                     url = url,
-                    content = markdown2.markdown(activity["content"], safe_mode=True),
+                    content = markdown2.markdown(item["content"], safe_mode=True),
                     _ = self.locale.translate,
                     handler = self)
 
         return self.topic_temp.generate(**data)
 
     def get(self):
+        self.user_id = ""
         if self.current_user:
             self.user_id = self.current_user.get("user_id", u"").encode("utf8")
 
-        self.activity_id = self.get_argument("id")
-        news_feed, user_ids = nomagic.feeds.get_news_by_id(self.activity_id)
+        self.item_id = self.get_argument("id")
+        item, user_ids = nomagic.feeds.get_item_by_id(self.item_id)
 
-        content = self.get_news_by_id(self.activity_id)
+        content = self.get_item_by_id(self.item_id)
         self.set_header("Cache-Control", "max-age=3600")
         self.render("../template/html_item.html", content=content)
 
@@ -237,12 +238,14 @@ class CommentHandler(BaseHandler):
             self.redirect("/login")
             return
 
-        self.activity_id = self.get_argument("id").encode("utf8")
+        item_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
-        parent = nomagic._get_entity_by_id(self.activity_id)
+        parent = nomagic._get_entity_by_id(item_id)
         assert parent["type"] in ["comment", "status"]
         parent["like"] = user_id in parent["likes"]
         parent["like_count"] = len(parent["likes"])
+        parent["content"] = markdown2.markdown(parent["content"], safe_mode=True)
+
 
         parent["user"] = nomagic._get_entity_by_id(user_id)
         self.render("../template/html_comment.html", **parent)
@@ -250,15 +253,15 @@ class CommentHandler(BaseHandler):
 
     def post(self):
         if not self.current_user:
-            raise tornado.web.HTTPError(401, "User not login")
+            self.redirect("/login")
             return
 
-        self.activity_id = self.get_argument("id").encode("utf8")
+        item_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
         content = self.get_argument("content").encode("utf8")
 
         data = {"content": content}
-        comment_ids, new_comment = nomagic.feeds.new_comment(user_id, self.activity_id, data)
+        comment_ids, new_comment = nomagic.feeds.new_comment(user_id, item_id, data)
 
         self.redirect("/item?id=%s" % new_comment.get("activity_id", ""))
 
@@ -273,6 +276,7 @@ class VerifyEmailHandler(BaseHandler):
             result = nomagic.auth.update_user(user_id, {"email_verified": True})
             self.verified = True
 
+        self.set_header("Cache-Control", "max-age=0")
         #self.write("done! " + str(self.verified))
         self.render('../template/verify_email.html')
 

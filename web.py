@@ -40,8 +40,8 @@ handlers = [
     (r"/api/login", api.LoginAPIHandler),
     (r"/api/signup", api.SignupAPIHandler),
     (r"/api/user_info", api.UserInfoAPIHandler),
-    (r"/api/get_news_feed", api.NewsFeedAPIHandler),
-    (r"/api/get_news_item", api.NewsItemAPIHandler),
+    (r"/api/get_feed", api.FeedAPIHandler),
+    (r"/api/get_item", api.ItemAPIHandler),
     (r"/api/profile_img", api.ProfileImgAPIHandler),
 
     (r"/api/like", api.LikeAPIHandler),

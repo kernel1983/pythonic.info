@@ -98,53 +98,33 @@ def new_status(user_id, data):
     return new_id, data
 
 
-def get_news_feed_by_user_id(user_id, activity_offset=0, activity_start_id=None):
-    """
-    This part need to rewrite because it doesn't compile all the friends' post
-    We need to fix it by using index_posts table
-    SELECT * FROM ... WHERE user_id in (...)
-    """
-    user = nomagic._get_entity_by_id(user_id)
-    activity_ids = user.get("activity", []) if user else []
-    if user:
-        activities = [dict(activity, id=activity_id)
-                        for activity_id, activity in nomagic._get_entities_by_ids(activity_ids)]
-        return [dict(activity,
-                     like_count = len(activity.get("likes", [])),
-                     comment_count = len(activity.get("comment_ids", [])),
-                     comments = [dict(comment,
-                                      like_count = len(comment.get("likes", [])),
-                                      id=comment_id)
-                                 for comment_id, comment in nomagic._get_entities_by_ids(activity.get("comment_ids", []))])
-                     for activity in activities]
-    return []
-
-def get_public_news_feed(activity_offset=10, activity_start_id=None):
-    if activity_start_id:
-        last_post = conn.get("SELECT * FROM index_posts WHERE entity_id = %s", activity_start_id)
-        posts = conn.query("SELECT * FROM index_posts WHERE rank < %s ORDER BY rank DESC LIMIT 0, %s", last_post["rank"], activity_offset)
+def get_public_feed(item_offset=10, item_start_id=None):
+    if item_start_id:
+        last_post = conn.get("SELECT * FROM index_posts WHERE entity_id = %s", item_start_id)
+        posts = conn.query("SELECT * FROM index_posts WHERE rank < %s ORDER BY rank DESC LIMIT 0, %s", last_post["rank"], item_offset)
     else:
-        posts = conn.query("SELECT * FROM index_posts ORDER BY rank DESC LIMIT 0, %s", activity_offset)
-    activity_ids = [i["entity_id"] for i in posts]
+        posts = conn.query("SELECT * FROM index_posts ORDER BY rank DESC LIMIT 0, %s", item_offset)
+    item_ids = [i["entity_id"] for i in posts]
 
     if posts:
-        activities = [dict(activity, id=activity_id)
-                        for activity_id, activity in nomagic._get_entities_by_ids(activity_ids)]
-        return [dict(activity,
-                     like_count = len(activity.get("likes", [])),
-                     comment_count = len(activity.get("comment_ids", [])),
-                     ) for activity in activities]
+        items = [dict(item, id=item_id)
+                        for item_id, item in nomagic._get_entities_by_ids(item_ids)]
+        return [dict(item,
+                     like_count = len(item.get("likes", [])),
+                     comment_count = len(item.get("comment_ids", [])),
+                     url = item.get("url"),
+                     ) for item in items]
     return []
 
-def get_news_by_id(activity_id):
-    activity = nomagic._get_entity_by_id(activity_id)
-    activity["id"] = activity_id
-    comments, user_ids = get_comments(activity)
+def get_item_by_id(item_id):
+    item = nomagic._get_entity_by_id(item_id)
+    comments, user_ids = get_comments(item)
 
-    return dict(activity,
-                id = activity_id,
-                like_count = len(activity.get("likes", [])),
+    return dict(item,
+                id = item_id,
+                like_count = len(item.get("likes", [])),
                 like = False,
+                url = item.get("url"),
                 comment_count = 0, #len(activity.get("comment_ids", [])),
                 comments = comments), user_ids
 

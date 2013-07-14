@@ -41,16 +41,36 @@
 
 <footer class="footer"></footer>
 
+<script type="text/javascript">
+var my_user_id = "{{handler.user_id}}";
+</script>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-<script src="/static/js/jquery.timeago.js"></script>
+<script type="text/javascript" src="/static/js/jquery.timeago.js"></script>
 
 <script type="text/javascript" src="/static/js/coffee-script.js"></script>
-<script type="text/coffeescript" src="/static/coffee/pythonic.coffee"></script>
+<script type="text/coffeescript" src="/static/coffee/feed.coffee"></script>
 
-<script type="text/javascript">
+
+<script type="text/template" id="feed-status-template">
+    <li id="feed-<%= id %>" class="topic">
+        <div class="title">
+            <a href="<%= url ? url : '/item?id='+id %>" <%= url ? 'target="blank"' : '' %>><%= title %></a>
+        </div>
+        <div class="info">
+            <a href="#" class="unlike <%= like ? '' : 'hide' %>" id="unlike-<%= id %>"><i class="icon icon-thumbs-down"></i></a>
+            <a href="#" class="like <%= like ? 'hide' : '' %>" id="like-<%= id %>"><i class="icon icon-thumbs-up"></i></a>
+            <a href="#" class="count-unlike <%= like ? '' : 'hide' %>" id="count-unlike-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
+            <a href="#" class="count-like <%= like ? 'hide' : '' %>" id="count-like-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
+            by <a href="#" class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+            <a class="linkSep">|</a> <a class="reply" id="reply-<%= id %>" href="/item?id=<%= id %>">{{_('discuss')}}</a>
+        </div>
+
+        <!--ul class="commentReply"></ul-->
+    </li>
 </script>
+
 
 </body>
 </html>

@@ -1,9 +1,9 @@
     <div id="feed-{{ id }}" class="comment">
         <div class="info">
-            <a href="#" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
-            <a href="#" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
-            <a href="#" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
-            <a href="#" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
+            <a href="/login" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
+            <a href="/login" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
+            <a href="/login" class="count-unlike {{ '' if like else 'hide' }}" id="count-unlike-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
+            <a href="/login" class="count-like {{ 'hide' if like else '' }}" id="count-like-{{ id }}"> <span>{{ like_count }}</span> {{_('Likes')}}</a>
             by <a class="username">{{ user["name"] }}</a> <abbr class="timeago postTime" title="{{ datetime }}"></abbr>
         </div>
         <p class="">{% raw content %}</p>

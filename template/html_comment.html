@@ -26,8 +26,8 @@
 
     <div class="row" id="feeds">
         <li id="feed-{{ id }}" class="topic">
-            <p class="black">{{ content }}</p>
-            <div class="gray">
+            <p class="">{% raw content %}</p>
+            <div class="info">
             {% if handler.current_user %}
                 <a href="#" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
                 <a href="#" class="like {{ 'hide' if like else '' }}" id="like-{{ id }}"><i class="icon icon-thumbs-up"></i></a>
@@ -46,7 +46,7 @@
             <div class="comment">
                 <form method="POST">
                     <textarea name="content" class="span5"></textarea><br/>
-                    <input name="activity_id" type="hidden" value="{{ id }}" />
+                    <input name="item_id" type="hidden" value="{{ id }}" />
                     <input type="submit" value="{{_('Post')}}" />
                 </form>
             </div>

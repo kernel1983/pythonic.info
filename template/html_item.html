@@ -31,14 +31,58 @@
 
 <footer class="footer"></footer>
 
+<script type="text/javascript">
+var ITEM_ID = "{{handler.item_id}}";
+var my_user_id = "{{handler.user_id}}";
+</script>
+
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-<script src="/static/js/jquery.timeago.js"></script>
+<script type="text/javascript" src="/static/js/jquery.timeago.js"></script>
 
 <script type="text/javascript" src="/static/js/coffee-script.js"></script>
-<script type="text/coffeescript" src="/static/coffee/pythonic.coffee"></script>
+<script type="text/coffeescript" src="/static/coffee/item.coffee"></script>
 
-<script type="text/javascript">
+<script type="text/template" id="feed-status-template">
+    <li id="feed-<%= id %>" class="topic">
+        <div class="title">
+            <a href="<%= url ? url : '/item?id='+id %>" <%= url ? 'target="blank"' : '' %>><%= title %></a>
+        </div>
+        <p class=""><%= content %></p>
+        <div class="info">
+            <a href="#" class="unlike <%= like ? '' : 'hide' %>" id="unlike-<%= id %>"><i class="icon icon-thumbs-down"></i></a>
+            <a href="#" class="like <%= like ? 'hide' : '' %>" id="like-<%= id %>"><i class="icon icon-thumbs-up"></i></a>
+            <a href="#" class="count-unlike <%= like ? '' : 'hide' %>" id="count-unlike-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
+            <a href="#" class="count-like <%= like ? 'hide' : '' %>" id="count-like-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
+            by <a class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+        </div>
+
+        <div class="comment">
+            <form action="/comment" method="POST">
+                <textarea name="content" class="span5"></textarea><br/>
+                <input name="id" type="hidden" value="<%= id %>" />
+                <input type="submit" value="{{_('Post')}}" />
+            </form>
+        </div>
+
+        <!--ul class="commentReply"></ul-->
+    </li>
+</script>
+
+<script type="text/template" id="feed-comment-template">
+    <div id="feed-<%= id %>" class="comment">
+        <div class="info">
+            <a class="unlike <%= like ? '' : 'hide' %>" id="unlike-<%= id %>"><i class="icon icon-thumbs-down"></i></a>
+            <a class="like <%= like ? 'hide' : '' %>" id="like-<%= id %>"><i class="icon icon-thumbs-up"></i></a>
+            <a class="count-unlike <%= like ? '' : 'hide' %>" id="count-unlike-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
+            <a class="count-like <%= like ? 'hide' : '' %>" id="count-like-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
+            by <a class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+        </div>
+        <p><%= content %></p>
+        <div class="info">
+            <a href="/comment?id=<%= id %>" class="reply" id="reply-<%= id %>">{{_('Reply')}}</a>
+        </div>
+    </div>
 </script>
 
 </body>
