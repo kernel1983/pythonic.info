@@ -10,7 +10,7 @@ $ ->
         user_id = feed_data["user_id"]
 
         feed_data["user"] = data["users"][user_id]
-        feed_data["like"] = feed_data["likes"].indexOf(my_user_id) > -1
+        feed_data["like"] = _.indexOf(feed_data["likes"], my_user_id) > -1
 
         insert_feed(feed_data, data["users"])
 
