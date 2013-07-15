@@ -42,7 +42,8 @@
 <footer class="footer"></footer>
 
 <script type="text/javascript">
-var my_user_id = "{{handler.user_id}}";
+var my_user_id = "{{handler.user_id or ''}}";
+var from_id = "{{handler.from_id or ''}}";
 </script>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

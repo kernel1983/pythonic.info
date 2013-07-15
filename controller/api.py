@@ -84,7 +84,8 @@ class FeedAPIHandler(BaseHandler):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
 
-        feeds = nomagic.feeds.get_public_feed()
+        from_id = self.get_argument("from", None)
+        feeds = nomagic.feeds.get_public_feed(item_start_id = from_id)
         users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in feeds])))
 
         self.finish({"users": users, "feeds": feeds})

@@ -2,7 +2,7 @@
 $ ->
     feed_status_template = _.template($('#feed-status-template').html())
 
-    $.getJSON "/api/get_feed", (data) ->
+    $.getJSON "/api/get_feed?from="+from_id, (data) ->
         $("#feeds").empty()
 
         more_id = null
@@ -12,12 +12,15 @@ $ ->
             more_id = feed_data["id"]
 
             feed_data["user"] = data["users"][user_id]
+            feed_data["url"] = feed_data["url_cn"] or feed_data["url_en"]
             feed_data["like"] = _.indexOf(feed_data["likes"], my_user_id) > -1
 
             insert_feed(feed_data, data["users"])
 
         if more_id
             $("#feeds").append('<a href="/?from=' + more_id + '">More</a>')
+        else
+            $("#feeds").append('<a href="/">No more</a>')
 
         $("abbr.timeago").timeago()
 

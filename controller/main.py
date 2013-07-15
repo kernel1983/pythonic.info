@@ -124,13 +124,13 @@ class FeedHandler(BaseHandler):
         if self.current_user:
             self.user_id = self.current_user.get("user_id", u"").encode("utf8")
 
-        from_id = self.get_argument("from", None)
-        news_feeds = nomagic.feeds.get_public_feed(item_start_id = from_id)
-        self.users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in news_feeds])))
+        self.from_id = self.get_argument("from", None)
+        feeds = nomagic.feeds.get_public_feed(item_start_id = self.from_id)
+        self.users = dict(nomagic._get_entities_by_ids(set([i["user_id"] for i in feeds])))
 
         self.more_id = None
         html_topics = []
-        for topic in news_feeds:
+        for topic in feeds:
             topic["like_count"] = len(topic.get("likes", []))
             topic["like"] = self.user_id in set(topic.get("likes", [])) if self.current_user else False
             topic["comment_count"] = 0
