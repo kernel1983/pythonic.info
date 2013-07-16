@@ -32,6 +32,7 @@ handlers = [
     (r"/submit", main.SubmitHandler),
     (r"/comment", main.CommentHandler),
     (r"/verify_email", main.VerifyEmailHandler),
+    (r"/invite", main.InviteHandler),
 
     (r"/setting", main.SettingHandler),
     (r"/login", main.LoginHandler),

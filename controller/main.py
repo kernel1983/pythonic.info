@@ -5,6 +5,7 @@ import cgi
 import json
 import random
 import string
+import urllib
 
 import tornado.options
 import tornado.ioloop
@@ -67,12 +68,15 @@ class SettingHandler(BaseHandler):
 
 class LoginHandler(BaseHandler, EmailHandler):
     def get(self):
+        self.email = self.get_argument("email", u"")
+        self.invite_code = self.get_argument("invite_code", u"")
         self.render('../template/login.html')
 
     def post(self):
         login = self.get_argument("login", None)
         password = self.get_argument("password", None)
 
+        invite_code = self.get_argument("invite_code", None)
         email = self.get_argument("email", None)
         name = self.get_argument("name", None)
         password1 = self.get_argument("password1", None)
@@ -85,7 +89,12 @@ class LoginHandler(BaseHandler, EmailHandler):
                 self.redirect("/?status=login")
                 return
 
-        elif email and name and password1 and password2 and password1 == password2:
+        elif email and name and password1 and password2 and password1 == password2 and invite_code:
+            invited = conn.get("SELECT * FROM invite WHERE code = %s", invite_code)
+            if not invited:
+                self.redirect("/login?status=need_invite_code")
+                return
+
             data = {"email": email, "name": name, "password": password1}
             try:
                 user_id, user = nomagic.auth.create_user(data)
@@ -98,7 +107,7 @@ class LoginHandler(BaseHandler, EmailHandler):
                 #send verify email here
                 msg = EmailMessage()
                 msg.subject = "Confirm Email from Pythonic Info"
-                msg.bodyText= "http://pythonic.info:8000/verify_email?user_id=%s&verify_code=%s" % (user_id, email_verify_code)
+                msg.bodyText= "http://pythonic.info/verify_email?user_id=%s&verify_code=%s" % (user_id, email_verify_code)
                 self.send("info@pythonic.info", str(email), msg)
                 print "url:", msg.bodyText
 
@@ -113,7 +122,7 @@ class LoginHandler(BaseHandler, EmailHandler):
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("user")
-        self.redirect("/")
+        self.render("../template/logout.html")
 
 
 class FeedHandler(BaseHandler):
@@ -280,3 +289,36 @@ class VerifyEmailHandler(BaseHandler):
         #self.write("done! " + str(self.verified))
         self.render('../template/verify_email.html')
 
+
+class InviteHandler(BaseHandler, EmailHandler):
+    def get(self):
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        self.render('../template/invite.html')
+
+    def post(self):
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        email = self.get_argument("email")
+
+        user_exist = conn.get("SELECT * FROM index_login WHERE login = %s", email)
+        invited = conn.get("SELECT * FROM invite WHERE email = %s", email)
+        if user_exist or invited:
+            self.redirect("/invite?status=exists")
+            return
+
+        #send email
+        invite_code = ''.join(random.choice(string.digits+string.letters) for x in range(14))
+        conn.execute("INSERT INTO invite (email, code) VALUES(%s, %s)", email, invite_code)
+
+        msg = EmailMessage()
+        msg.subject = "Invite from Pythonic Info"
+        msg.bodyText= "http://pythonic.info/login?email=%s&invite_code=%s" % (urllib.quote(email), invite_code)
+        self.send("info@pythonic.info", str(email), msg)
+        print "url:", msg.bodyText
+
+        self.redirect("/invite?status=success")

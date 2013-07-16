@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pythonic Info Setting</title>
+    <title>Pythonic Info Invite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,24 +28,13 @@
 <div class="container" role="main">
     {% include "../template/include/header.html" %}
     <div class="row" id="feeds">
-        <div class="span6">
+        <div class="span4">
             <form method="POST">
-                <h1 class="">{{_('Update Your Info')}}</h1>
+                <h1 class="">{{_('Invite')}}</h1>
                 <br/>
-                <input id="name" name="name" type="text" placeholder="{{_('Name')}}" value="{{ handler.user['name'] }}" />
-                <br/>
-                <input id="update_button" type="submit" value="{{_('Update')}}" />
-            </form>
-            <hr/>
-            <form method="POST">
-                <h1 class="">{{_('Change Password')}}</h1>
-                <br/>
-                <input id="password0" name="password0" type="password" placeholder="{{_('Old Password')}}" />
-                <br />
-                <input id="password1" name="password1" type="password" placeholder="{{_('Password')}}" />
-                <input id="password2" name="password2" type="password" placeholder="{{_('Password Again')}}" />
-                <br/>
-                <input id="password_button" type="submit" value="{{_('Change Password')}}" />
+                <span>{{_('Email')}}</span><br/>
+                <input id="email" name="email" type="email" value="" /><br/>
+                <input id="invite_button" type="submit" value="{{_('Invite')}}" />
             </form>
         </div>
     </div>
@@ -61,7 +50,6 @@ $ ->
     $("#open_help").click () -> $("#help_panel").show()
     $("#close_help").click () -> $("#help_panel").hide()
 </script>
-
 {% include "../template/include/ga.html" %}
 
 </body>
