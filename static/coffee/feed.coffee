@@ -50,5 +50,7 @@ $ ->
         if(feed_data["type"]=="status")
             $("#feeds").append(feed_status_template(feed_data))
 
+    $("#open_help").click () -> $("#help_panel").show()
+    $("#close_help").click () -> $("#help_panel").hide()
 
     $("abbr.timeago").timeago()

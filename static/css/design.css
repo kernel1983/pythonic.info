@@ -13,6 +13,12 @@ a:visited {
     color: black;
 }
 
+#help_panel {
+    text-align:right;
+    padding:10px;
+    display: none;
+}
+
 #feeds{
     background-color: #f6f6ef;
     padding-top: 10px;

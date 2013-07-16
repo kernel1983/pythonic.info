@@ -54,4 +54,7 @@ $ ->
             feed.append(feed_comment_template(comment_data))
             insert_feed(comment_data, users)
 
+    $("#open_help").click () -> $("#help_panel").show()
+    $("#close_help").click () -> $("#help_panel").hide()
+
     $("abbr.timeago").timeago()

@@ -107,6 +107,7 @@ class ItemAPIHandler(BaseHandler):
         #user_id = self.current_user["user_id"].encode("utf8")
         item, user_ids = nomagic.feeds.get_item_by_id(entity_id)
         item["comments"] = self.get_comments(item["comments"])
+        item["content"] = markdown2.markdown(item["content"], safe_mode=True)
         users = dict(nomagic._get_entities_by_ids(user_ids))
 
         self.finish({"users": users, "item": item})

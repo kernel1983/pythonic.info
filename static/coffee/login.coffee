@@ -20,3 +20,6 @@ $ ->
         password = $("#password").val()
         $.post "/api/login", {"login": user, "password": password}, () ->
             window.location="/"
+
+    $("#open_help").click () -> $("#help_panel").show()
+    $("#close_help").click () -> $("#help_panel").hide()
