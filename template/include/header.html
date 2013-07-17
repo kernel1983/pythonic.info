@@ -1,14 +1,18 @@
     <div class="row" id="header">
-        <div class="text-left span8" ><a href="/"><b>Pythonic Info</b></a> | <a href="submit">{{_('submit')}}</a></div>
+        <div class="text-left span7" ><a href="/"><b>Pythonic Info</b></a> | <a href="submit">{{_('submit')}}</a></div>
         {% if handler.current_user %}
-        <div class="text-right span1" ><a href="/invite">{{_('Invite')}}</a></div>
-        <div class="text-right span1" ><a href="/setting">{{_('Setting')}}</a></div>
-        <div class="text-right span1" ><a href="/logout">{{_('Logout')}}</a></div>
+        <div class="text-right span4" >
+            <a href="/invite">{{_('Invite')}}</a>
+            <a href="/setting">{{_('Setting')}}</a>
+            <a href="/logout">{{_('Logout')}}</a>
+            <a href="#" id="open_help">{{_('Help')}}</a>
+        </div>
         {% else %}
-        <div class="text-right span2" ></div>
-        <div class="text-right span1" ><a href="/login">{{_('Login')}}</a></div>
+        <div class="text-right span4" >
+            <a href="/login">{{_('Login')}}</a>
+            <a href="#" id="open_help">{{_('Help')}}</a>
+        </div>
         {% end if %}
-        <div class="text-right span1" ><a href="#" id="open_help">{{_('Help')}}</a></div>
     </div>
 
     <div class="row" id="help_panel">

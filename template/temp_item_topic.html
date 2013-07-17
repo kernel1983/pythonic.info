@@ -4,9 +4,9 @@
             <a href="{{ url }}" target="blank">{{ title }}</a>
         {% else %}
             <a href="/item?id={{ id }}">{{ title }}</a>
-            <p class="">{% raw content %}</p>
         {% end if %}
         </div>
+        <p class="">{% raw content %}</p>
         <div class="info">
         {% if handler.current_user %}
             <a href="#" class="unlike {{ '' if like else 'hide' }}" id="unlike-{{ id }}"><i class="icon icon-thumbs-down"></i></a>
@@ -28,7 +28,7 @@
             <form action="/comment" method="POST">
                 <textarea name="content" class="span5"></textarea><br/>
                 <input name="id" type="hidden" value="{{ id }}" />
-                <input type="submit" value="{{_('Post')}}" />
+                <input type="submit" class="btn" value="{{_('Post')}}" />
             </form>
         </div>
         {% end if %}

@@ -9,7 +9,7 @@
 
     <!-- Le styles -->
     <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <!--link href="/static/css/bootstrap-responsive.css" rel="stylesheet"-->
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
     <!--link href="/static/css/scaffolding.css" rel="stylesheet"-->
     <link href="/static/css/design.css" rel="stylesheet">
 
@@ -28,13 +28,13 @@
 <div class="container" role="main">
     {% include "../template/include/header.html" %}
     <div class="row" id="feeds">
-        <div class="span4">
+        <div class="span9">
             <form method="POST">
                 <h1 class="">{{_('Invite')}}</h1>
                 <br/>
                 <span>{{_('Email')}}</span><br/>
                 <input id="email" name="email" type="email" value="" /><br/>
-                <input id="invite_button" type="submit" value="{{_('Invite')}}" />
+                <input id="invite_button" type="submit" class="btn" value="{{_('Invite')}}" />
             </form>
         </div>
     </div>

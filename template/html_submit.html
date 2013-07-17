@@ -13,7 +13,7 @@
     <!-- <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'> -->
 
     <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <!--link href="/static/css/bootstrap-responsive.css" rel="stylesheet"-->
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="/static/css/design.css" rel="stylesheet">
 
 </head>
@@ -33,7 +33,7 @@
             <label class="span2">{{_('Title')}}</label><input name="title" class="span5" /><br/><br/>
             <label class="span2">{{_('Content')}}</label><textarea name="content" class="span5"></textarea><br/>
             <input name="activity_id" type="hidden" value="{{ id }}" />
-            <label class="span2"></label><input type="submit" value="{{_('Post')}}" />
+            <label class="span2"></label><input type="submit" class="btn" value="{{_('Post')}}" />
         </form>
     </div>
 </div>

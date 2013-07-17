@@ -9,7 +9,7 @@
 
     <!-- Le styles -->
     <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <!--link href="/static/css/bootstrap-responsive.css" rel="stylesheet"-->
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
     <!--link href="/static/css/scaffolding.css" rel="stylesheet"-->
     <link href="/static/css/design.css" rel="stylesheet">
 
@@ -36,7 +36,7 @@
                 <input id="login" name="login" type="email" value="{{handler.email}}" /><br/>
                 <span>{{_('Password')}}</span><br/>
                 <input id="password" name="password" type="password" /><br/>
-                <input id="login_button" type="submit" value="{{_('Login')}}" />
+                <input id="login_button" type="submit" class="btn" value="{{_('Login')}}" />
             </form>
             <hr/>
             <form method="POST">
@@ -52,7 +52,7 @@
                 <input id="password1" name="password1" type="password" /><br/>
                 <span>{{_('Password Again')}}</span><br/>
                 <input id="password2" name="password2" type="password" /><br/>
-                <input id="signup_button" type="submit" value="{{_('Signup')}}" />
+                <input id="signup_button" type="submit" class="btn" value="{{_('Signup')}}" />
             </form>
         </div>
     </div>

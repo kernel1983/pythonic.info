@@ -315,9 +315,11 @@ class InviteHandler(BaseHandler, EmailHandler):
         invite_code = ''.join(random.choice(string.digits+string.letters) for x in range(14))
         conn.execute("INSERT INTO invite (email, code) VALUES(%s, %s)", email, invite_code)
 
+        self.email = urllib.quote(email)
+        self.invite_code = invite_code
         msg = EmailMessage()
         msg.subject = "Invite from Pythonic Info"
-        msg.bodyText= "http://pythonic.info/login?email=%s&invite_code=%s" % (urllib.quote(email), invite_code)
+        msg.bodyText= self.render_string("../template/email_invite.html")
         self.send("info@pythonic.info", str(email), msg)
         print "url:", msg.bodyText
 
