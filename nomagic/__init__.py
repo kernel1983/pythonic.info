@@ -12,7 +12,7 @@ from setting import ring
 _RING = hash_ring.HashRing(range(len(ring)))
 
 
-def _pack(data): return json.dumps(data, ensure_ascii=False)
+def _pack(data): return json.dumps(data)
 def _unpack(data): return json.loads(data)
 def _key(data): return data
 
