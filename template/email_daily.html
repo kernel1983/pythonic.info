@@ -1,0 +1,14 @@
+<table style="width:100%; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; border-spacing:0; border-collapse:collapse;">
+    <tr>
+        <td style="background-color: #ff6600; padding: 3px 0 3px 20px;">
+            <a style="color: black; text-decoration:none; font-weight: bold;" href="http://pythonic.info">Pythonic Info</a> | <a style="color: black; text-decoration:none;" href="http://pythonic.info/submit">submit</a>
+        </td>
+    </tr>
+    {% for post_id, post in posts %}
+    <tr>
+        <td style="background-color: #f6f6ef; padding: 5px 0 5px 20px;">
+            <a style="color: gray; text-decoration:none;" href="http://pythonic.info/item?id={{ post_id }}" target="blank">{{ post['title'] }}</a>
+        </td>
+    </tr>
+    {% end for %}
+</table>

@@ -1,4 +1,5 @@
 import sys
+import os
 import datetime
 import time
 import pickle
@@ -7,12 +8,11 @@ import binascii
 import json
 import zlib
 
-sys.path.append(".")
-sys.path.append("..")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../')
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../vendor')
 
 from setting import settings
 from setting import conn
-#from setting import ring
 
 import nomagic
 

@@ -33,6 +33,7 @@ loader = tornado.template.Loader(os.path.join(os.path.dirname(__file__), "../tem
 
 class SettingHandler(BaseHandler):
     def get(self):
+        self.set_header("Cache-Control", "max-age=0")
         if not self.current_user:
             self.redirect("/login")
             return
@@ -107,7 +108,7 @@ class LoginHandler(BaseHandler, EmailHandler):
                 #send verify email here
                 msg = EmailMessage()
                 msg.subject = "Confirm Email from Pythonic Info"
-                msg.bodyText= "http://pythonic.info/verify_email?user_id=%s&verify_code=%s" % (user_id, email_verify_code)
+                msg.bodyText = "http://pythonic.info/verify_email?user_id=%s&verify_code=%s" % (user_id, email_verify_code)
                 self.send("info@pythonic.info", str(email), msg)
                 print "url:", msg.bodyText
 
@@ -211,6 +212,7 @@ class ItemHandler(BaseHandler):
 
 class SubmitHandler(BaseHandler):
     def get(self):
+        self.set_header("Cache-Control", "max-age=0")
         if not self.current_user:
             self.redirect("/login")
             return
@@ -243,6 +245,7 @@ class SubmitHandler(BaseHandler):
 
 class CommentHandler(BaseHandler):
     def get(self):
+        self.set_header("Cache-Control", "max-age=0")
         if not self.current_user:
             self.redirect("/login")
             return
@@ -292,6 +295,7 @@ class VerifyEmailHandler(BaseHandler):
 
 class InviteHandler(BaseHandler, EmailHandler):
     def get(self):
+        self.set_header("Cache-Control", "max-age=0")
         if not self.current_user:
             self.redirect("/login")
             return
@@ -319,8 +323,8 @@ class InviteHandler(BaseHandler, EmailHandler):
         self.invite_code = invite_code
         msg = EmailMessage()
         msg.subject = "Invite from Pythonic Info"
-        msg.bodyText= self.render_string("../template/email_invite.html")
         self.send("info@pythonic.info", str(email), msg)
+        msg.bodyHtml = self.render_string("../template/email_invite.html")
         print "url:", msg.bodyText
 
         self.redirect("/invite?status=success")
