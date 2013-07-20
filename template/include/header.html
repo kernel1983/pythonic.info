@@ -1,5 +1,5 @@
     <div class="row" id="header">
-        <div class="text-left span8" ><a href="/"><b>Pythonic Info</b></a> | <a href="submit">{{_('submit')}}</a></div>
+        <div class="text-left span8" ><a href="/"><b>{{_('Pythonic Info')}}</b></a> | <a href="submit">{{_('submit')}}</a></div>
         {% if handler.current_user %}
         <div class="text-right span4" >
             <a href="/invite">{{_('Invite')}}</a>
@@ -17,5 +17,14 @@
 
     <div class="row" id="help_panel">
         <div><a href="#" id="close_help">[{{_('Close')}}]</a></div>
+        <div><a href="http://pythonic.info/item?id=dc7e6203198a4964802a90cdb64c7dce">关于 Pythonic.Info?</a></div>
+        <div><a href="http://pythonic.info/item?id=b4abf2de2f344842b79c2d8f30fb0c88">什么是 Pythonic?</a></div>
+        <div><a href="https://github.com/kernel1983/pythonic.info">开源代码</a></div>
+        <div><a href="https://github.com/kernel1983/pythonic.info/issues">提交bug和建议</a></div>
     </div>
 
+    {#% if handler.user.get("email_verified") %}
+    <div class="row">
+        Please verify your email!
+    </div>
+    {% end if %#}

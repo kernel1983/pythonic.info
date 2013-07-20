@@ -19,8 +19,8 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_access_token(self):
         return None
 
-    def get_user_locale(self):
-        return None
+    #def get_user_locale(self):
+    #    return tornado.locale.get("zh_CN")
 
 """
 class EmailHandler(AmazonSES):

@@ -63,6 +63,7 @@ handlers = [
 
 if __name__ == "__main__":
     tornado.locale.load_translations(os.path.join(os.path.dirname(__file__), "csv_translations"))
+    tornado.locale.set_default_locale("zh_CN")
     tornado.options.define("port", default=8000, help="Run server on a specific port", type=int)
     tornado.options.parse_command_line()
     application = tornado.web.Application(handlers, **settings)

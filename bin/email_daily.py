@@ -12,6 +12,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../')
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../vendor')
 
 import tornado.template
+import tornado.locale
 import amazon_ses
 
 from setting import settings
@@ -20,7 +21,7 @@ from setting import conn
 import nomagic
 
 
-def daily():
+def daily(hours):
     now = time.time()
     offset = 0
     post_ids_to_email = set()
@@ -34,7 +35,7 @@ def daily():
         for post_id, post in nomagic._get_entities_by_ids(post_ids):
             period = (now - time.mktime(datetime.datetime.strptime(post["datetime"], "%Y-%m-%dT%H:%M:%S.%f").timetuple())) / 3600
 
-            if period <= 24:
+            if period <= hours:
                 post_ids_to_email.add(post_id)
 
         offset += 100
@@ -42,9 +43,10 @@ def daily():
     posts_to_email = nomagic._get_entities_by_ids(post_ids_to_email)
     loader = tornado.template.Loader(os.path.dirname(os.path.abspath(__file__)) + "/../template/")
 
+    locale = tornado.locale.get()
     msg = amazon_ses.EmailMessage()
-    msg.subject = 'Pythonic Info Daily'
-    msg.bodyHtml = loader.load("email_daily.html").generate(posts=posts_to_email)
+    msg.subject = locale.translate('Pythonic Info Daily').encode("utf-8")
+    msg.bodyHtml = loader.load("email_daily.html").generate(posts=posts_to_email, _=locale.translate)
 
     users_exists = conn.query("SELECT * FROM index_login")
     users_invited = conn.query("SELECT * FROM invite")
@@ -57,5 +59,14 @@ def daily():
 
 
 if __name__ == '__main__':
-    daily()
+    tornado.locale.load_translations(os.path.join(os.path.dirname(__file__) + "/../csv_translations/"))
+    tornado.locale.set_default_locale("zh_CN")
+
+    if len(sys.argv) < 2:
+        sys.exit()
+
+    hours = float(sys.argv[1])
+    print hours
+
+    daily(hours)
 
