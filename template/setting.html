@@ -33,7 +33,7 @@
                 <h3 class="">{{_('Update Your Info')}}</h3>
                 <br/>
                 <label class="span2">{{_('Name')}}</label>
-                <input id="name" name="name" type="text" value="{{ handler.user['name'] }}" /><br/>
+                <input id="name" name="name" type="text" value="{{ handler.user.get('name', '') }}" /><br/>
                 <input id="update_button" type="submit" class="btn" value="{{_('Update')}}" /><br/>
             </form>
             <hr/>

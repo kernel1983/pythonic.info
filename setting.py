@@ -10,6 +10,7 @@ settings = {
     "AmazonAccessKeyID": "--------------------",
     "AmazonSecretAccessKey": "----------------------------------------",
     "cookie_secret": "--------------------------------------------",
+    "email_sender": "info@pythonic.info",
     "login_url": "/login",
     "debug": True,
 }

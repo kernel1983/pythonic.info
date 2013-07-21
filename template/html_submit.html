@@ -27,13 +27,17 @@
     <div class="row" id="feeds">
         <form method="POST">
             <br/>
-            <label class="span2">{{_('English URL')}}</label><input name="url_en" class="span5" /><br/><br/>
-            <label class="span2">{{_('Chinese URL')}}</label><input name="url_cn" class="span5" /><br/><br/>
+            <label class="span2">{{_('English URL')}}</label><input name="url_en" class="span5" value="{{ handler.url_en }}" /><br/><br/>
+            <label class="span2">{{_('Chinese URL')}}</label><input name="url_cn" class="span5" value="{{ handler.url_cn }}" /><br/><br/>
             <label class="span6">{{_('(One or both, or just fill in Content)')}}</label><br/><br/><br/><br/>
-            <label class="span2">{{_('Title')}}</label><input name="title" class="span5" /><br/><br/>
-            <label class="span2">{{_('Content')}}<br />({{_('support Markdown')}})</label><textarea name="content" class="span5"></textarea><br/>
-            <input name="activity_id" type="hidden" value="{{ id }}" />
-            <label class="span2"></label><input type="submit" class="btn" value="{{_('Post')}}" />
+            <label class="span2">{{_('Title')}}</label><input name="title" class="span5" value="{{ handler.title }}" /><br/><br/>
+            <label class="span2">{{_('Content')}}<br />({{_('support Markdown')}})</label><textarea name="content" class="span5">{{ handler.content }}</textarea><br/>
+            <label class="span2"></label>
+            {% if request.path == '/submit' %}
+                <input type="submit" class="btn" value="{{_('Post')}}" />
+            {% else %}
+                <input type="submit" class="btn" value="{{_('Update')}}" />
+            {% end if %}
         </form>
     </div>
 </div>

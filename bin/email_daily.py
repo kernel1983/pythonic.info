@@ -55,7 +55,7 @@ def daily(hours):
     for email in set([user["login"] for user in users_exists] + [user["email"] for user in users_invited]):
         if "@" in email:
             print email
-            sender.sendEmail("info@pythonic.info", email, msg)
+            sender.sendEmail(settings["email_sender"], email, msg)
 
 
 if __name__ == '__main__':

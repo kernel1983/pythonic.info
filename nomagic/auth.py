@@ -86,6 +86,13 @@ def get_user_id_by_login(login):
     index_login = conn.get("SELECT * FROM index_login WHERE login = %s", login)
     return index_login["entity_id"] if index_login else None
 
+def get_users_by_ids(ids):
+    users = [dict(user, id=user_id) for user_id, user in nomagic._get_entities_by_ids(ids)]
+    for user in users:
+        del user["password"]
+        del user["salt"]
+    return users
+
 def email_invite(email):
     """email invite can be used for both self signup and inviting friends to join"""
     # valid email, existing in system?

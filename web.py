@@ -29,8 +29,10 @@ from controller import auth
 handlers = [
     (r"/", main.FeedHandler),
     (r"/item", main.ItemHandler),
+    (r"/edit_item", main.EditItemHandler),
     (r"/submit", main.SubmitHandler),
     (r"/comment", main.CommentHandler),
+    (r"/edit_comment", main.EditCommentHandler),
     (r"/verify_email", main.VerifyEmailHandler),
     (r"/invite", main.InviteHandler),
 

@@ -203,8 +203,6 @@ class ItemHandler(BaseHandler):
             self.user_id = self.current_user.get("user_id", u"").encode("utf8")
 
         self.item_id = self.get_argument("id")
-        item, user_ids = nomagic.feeds.get_item_by_id(self.item_id)
-
         content = self.get_item_by_id(self.item_id)
         self.set_header("Cache-Control", "max-age=3600")
         self.render("../template/html_item.html", content=content)
@@ -217,13 +215,18 @@ class SubmitHandler(BaseHandler):
             self.redirect("/login")
             return
 
+        self.title = ""
+        self.url_cn = ""
+        self.url_en = ""
+        self.content = ""
+
         user_id = self.current_user["user_id"].encode("utf8")
         self.user = nomagic._get_entity_by_id(user_id)
         self.render("../template/html_submit.html")
 
     def post(self):
         if not self.current_user:
-            raise tornado.web.HTTPError(401, "User not login")
+            self.redirect("/login")
             return
 
         self.title = self.get_argument("title")
@@ -250,32 +253,119 @@ class CommentHandler(BaseHandler):
             self.redirect("/login")
             return
 
-        item_id = self.get_argument("id").encode("utf8")
+        comment_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
-        parent = nomagic._get_entity_by_id(item_id)
+        parent = nomagic._get_entity_by_id(comment_id)
         assert parent["type"] in ["comment", "status"]
         parent["like"] = user_id in parent["likes"]
         parent["like_count"] = len(parent["likes"])
         parent["content"] = markdown2.markdown(parent["content"], safe_mode=True)
-
+        parent["edit_content"] = ""
 
         parent["user"] = nomagic._get_entity_by_id(user_id)
         self.render("../template/html_comment.html", **parent)
-
 
     def post(self):
         if not self.current_user:
             self.redirect("/login")
             return
 
-        item_id = self.get_argument("id").encode("utf8")
+        comment_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
         content = self.get_argument("content").encode("utf8")
 
         data = {"content": content}
-        comment_ids, new_comment = nomagic.feeds.new_comment(user_id, item_id, data)
+        comment_ids, new_comment = nomagic.feeds.new_comment(user_id, comment_id, data)
 
         self.redirect("/item?id=%s" % new_comment.get("activity_id", ""))
+
+
+class EditItemHandler(BaseHandler):
+    def get(self):
+        self.set_header("Cache-Control", "max-age=0")
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        user_id = self.current_user["user_id"].encode("utf8")
+        self.item_id = self.get_argument("id")
+        item = nomagic._get_entity_by_id(self.item_id)
+        if item['user_id'] != user_id:
+            raise tornado.web.HTTPError(401, "Not allow to edit")
+            return
+
+        self.title = item["title"]
+        self.url_cn = item["url_cn"]
+        self.url_en = item["url_en"]
+        self.content = item["content"]
+
+        self.user = nomagic._get_entity_by_id(user_id)
+        self.render("../template/html_submit.html")
+
+    def post(self):
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        self.title = self.get_argument("title")
+        self.url_cn = self.get_argument("url_cn", "")
+        self.url_en = self.get_argument("url_en", "")
+        self.content = self.get_argument("content", "")
+        self.item_id = self.get_argument("id")
+        self.user_id = self.current_user.get("user_id", u"").encode("utf8")
+
+        if (self.url_en or self.url_cn) or self.content:
+            data = {
+                "title": self.title,
+                "content": self.content,
+                "url_en": self.url_en, "url_cn": self.url_cn,
+            }
+            entity = nomagic._get_entity_by_id(self.item_id)
+            entity.update(data)
+            nomagic._update_entity_by_id(self.item_id, entity)
+            self.redirect("/item?id=%s" % self.item_id)
+        else:
+            self.redirect("/edit_item?id=%s" % self.item_id)
+
+class EditCommentHandler(BaseHandler):
+    def get(self):
+        self.set_header("Cache-Control", "max-age=0")
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        comment_id = self.get_argument("id").encode("utf8")
+        user_id = self.current_user["user_id"].encode("utf8")
+        parent = nomagic._get_entity_by_id(comment_id)
+        if parent['user_id'] != user_id:
+            raise tornado.web.HTTPError(401, "Not allow to edit")
+            return
+
+        assert parent["type"] in ["comment", "status"]
+        parent["like"] = user_id in parent["likes"]
+        parent["like_count"] = len(parent["likes"])
+        parent["edit_content"] = parent["content"]
+        parent["content"] = markdown2.markdown(parent["content"], safe_mode=True)
+
+        parent["user"] = nomagic._get_entity_by_id(user_id)
+        self.render("../template/html_comment.html", **parent)
+
+    def post(self):
+        if not self.current_user:
+            self.redirect("/login")
+            return
+
+        comment_id = self.get_argument("id").encode("utf8")
+        user_id = self.current_user["user_id"].encode("utf8")
+        content = self.get_argument("content").encode("utf8")
+
+        data = {"content": content}
+        entity = nomagic._get_entity_by_id(comment_id)
+        entity.update(data)
+        nomagic._update_entity_by_id(comment_id, entity)
+
+        self.redirect("/edit_comment?id=%s" % comment_id)
+
 
 class VerifyEmailHandler(BaseHandler):
     def get(self):
@@ -323,8 +413,8 @@ class InviteHandler(BaseHandler, EmailHandler):
         self.invite_code = invite_code
         msg = EmailMessage()
         msg.subject = "Invite from Pythonic Info"
-        self.send("info@pythonic.info", str(email), msg)
         msg.bodyHtml = self.render_string("../template/email_invite.html")
+        self.send(settings["email_sender"], str(email), msg)
         print "url:", msg.bodyText
 
         self.redirect("/invite?status=success")

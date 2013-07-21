@@ -55,6 +55,7 @@ var my_user_id = "{{handler.user_id}}";
             <a href="#" class="count-unlike <%= like ? '' : 'hide' %>" id="count-unlike-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
             <a href="#" class="count-like <%= like ? 'hide' : '' %>" id="count-like-<%= id %>"> <span><%= like_count %></span> {{_('Likes')}}</a>
             by <a class="username"><%= user["name"] %></a> <abbr class="timeago postTime" title="<%= datetime %>"></abbr>
+            <a href="/edit_item?id=<%= id %>" class="<%= my_user_id==user_id ? '' : 'hide' %>" id="edit-item-<%= id %>">{{_('Edit')}}</a>
         </div>
 
         <div class="comment">
@@ -81,6 +82,7 @@ var my_user_id = "{{handler.user_id}}";
         <p><%= content %></p>
         <div class="info">
             <a href="/comment?id=<%= id %>" class="reply" id="reply-<%= id %>">{{_('Reply')}}</a>
+            <a href="/edit_comment?id=<%= id %>" class="<%= my_user_id==user_id ? '' : 'hide' %>" id="edit-comment-<%= id %>">{{_('Edit')}}</a>
         </div>
     </div>
 </script>
