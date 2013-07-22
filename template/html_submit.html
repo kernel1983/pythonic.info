@@ -25,21 +25,30 @@
     {% include "../template/include/header.html" %}
 
     <div class="row" id="feeds">
-        <form method="POST">
-            <br/>
-            <label class="span2">{{_('English URL')}}</label><input name="url_en" class="span5" value="{{ handler.url_en }}" /><br/><br/>
-            <label class="span2">{{_('Chinese URL')}}</label><input name="url_cn" class="span5" value="{{ handler.url_cn }}" /><br/><br/>
-            <label class="span6">{{_('(One or both, or just fill in Content)')}}</label><br/><br/><br/><br/>
-            <label class="span2">{{_('Title')}}</label><input name="title" class="span5" value="{{ handler.title }}" /><br/><br/>
-            <label class="span2">{{_('Content')}}<br />({{_('support Markdown')}})</label><textarea name="content" class="span5">{{ handler.content }}</textarea><br/>
-            <label class="span2"></label>
-            {% if request.path == '/submit' %}
-                <input type="submit" class="btn" value="{{_('Post')}}" />
-            {% else %}
-                <input type="submit" class="btn" value="{{_('Update')}}" />
-            {% end if %}
-        </form>
+        <div class="span9">
+            <form method="POST">
+                <br/>
+                <label class="span2">{{_('English URL')}}</label><input name="url_en" class="span5" value="{{ handler.url_en }}" /><br/><br/>
+                <label class="span2">{{_('Chinese URL')}}</label><input name="url_cn" class="span5" value="{{ handler.url_cn }}" /><br/><br/>
+                <label class="span6">{{_('(One or both, or just fill in Content)')}}</label><br/><br/><br/><br/>
+                <label class="span2">{{_('Title')}}</label><input name="title" class="span5" value="{{ handler.title }}" /><br/><br/>
+                <label class="span2">{{_('Content')}}<br />({{_('support Markdown')}})</label><textarea name="content" class="span5">{{ handler.content }}</textarea><br/>
+                <label class="span2"></label>
+                {% if request.path == '/submit' %}
+                    <input type="submit" class="btn" value="{{_('Post')}}" />
+                {% else %}
+                    <input type="submit" class="btn" value="{{_('Update')}}" />
+                {% end if %}
+            </form>
+        </div>
+        <div class="span2">
+            {{_('Drag and Drop the share button on your browser toolbar:')}}
+            <a id="toolbar" href="javascript:window.open('http://{{ request.host }}/submit?url='+encodeURIComponent(window.location.href)+'&title='+encodeURIComponent(document.title), 'pythonic_new_' + (new Date).getTime(), 'status=no,resizable=no,scrollbars=yes,personalbar=no,directories=no,location=no,toolbar=no,menubar=no,width=990,height=490,left=0,top=0');void((function(){var e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('src','http://{{ request.host }}/static/tool.js?c='+Math.random()*99999999);document.body.appendChild(e)})());">PI {{_('submit')}}</a>
+        </div>
+
     </div>
+
+
 </div>
 
 <footer class="footer"></footer>

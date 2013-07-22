@@ -215,8 +215,8 @@ class SubmitHandler(BaseHandler):
             self.redirect("/login")
             return
 
-        self.title = ""
-        self.url_cn = ""
+        self.title = self.get_argument("title", "")
+        self.url_cn = self.get_argument("url", "")
         self.url_en = ""
         self.content = ""
 

@@ -98,7 +98,7 @@ def new_status(user_id, data):
     return new_id, data
 
 
-def get_public_feed(item_offset=10, item_start_id=None):
+def get_public_feed(item_offset=15, item_start_id=None):
     if item_start_id:
         last_post = conn.get("SELECT * FROM index_posts WHERE entity_id = %s", item_start_id)
         posts = conn.query("SELECT * FROM index_posts WHERE rank < %s ORDER BY rank DESC LIMIT 0, %s", last_post["rank"], item_offset)
