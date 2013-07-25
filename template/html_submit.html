@@ -42,7 +42,7 @@
             </form>
         </div>
         <div class="span2">
-            {{_('Drag and Drop the share button on your browser toolbar:')}}
+            {{_("Drag and Drop the 'PI submit' button on your browser Bookmarks Bar:")}}
             <a id="toolbar" href="javascript:window.open('http://{{ request.host }}/submit?url='+encodeURIComponent(window.location.href)+'&title='+encodeURIComponent(document.title), 'pythonic_new_' + (new Date).getTime(), 'status=no,resizable=no,scrollbars=yes,personalbar=no,directories=no,location=no,toolbar=no,menubar=no,width=990,height=490,left=0,top=0');void((function(){var e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('src','http://{{ request.host }}/static/tool.js?c='+Math.random()*99999999);document.body.appendChild(e)})());">PI {{_('submit')}}</a>
         </div>
 

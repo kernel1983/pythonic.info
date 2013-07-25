@@ -34,6 +34,8 @@
                 <br/>
                 <label class="span2">{{_('Name')}}</label>
                 <input id="name" name="name" type="text" value="{{ handler.user.get('name', '') }}" /><br/>
+                <label class="span2">{{_('Receive Daily Email')}}</label>
+                <input id="receive_daily_email" name="receive_daily_email" type="checkbox" {{ 'checked' if handler.user.get('receive_daily_email', True) else '' }} /><br/><br/>
                 <input id="update_button" type="submit" class="btn" value="{{_('Update')}}" /><br/>
             </form>
             <hr/>

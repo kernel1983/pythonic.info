@@ -46,11 +46,17 @@ class SettingHandler(BaseHandler):
         if self.current_user:
             user_id = self.current_user["user_id"].encode("utf8")
             self.user = nomagic._get_entity_by_id(user_id)
+            post_data = {}
 
             name = self.get_argument("name", None)
             if name:
-                post_data = {}
                 post_data["name"] = name
+
+            receive_daily_email = bool(self.get_argument("receive_daily_email", False))
+            if self.user.get("receive_daily_email", True) != receive_daily_email:
+                print receive_daily_email
+                post_data["receive_daily_email"] = receive_daily_email
+            if post_data:
                 nomagic.auth.update_user(user_id, post_data)
 
             password0 = self.get_argument("password0", None)

@@ -83,6 +83,7 @@ class FeedAPIHandler(BaseHandler):
         self.set_header("Cache-Control", "max-age=0")
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         from_id = self.get_argument("from", None)
         feeds = nomagic.feeds.get_public_feed(item_start_id = from_id)
@@ -102,6 +103,7 @@ class ItemAPIHandler(BaseHandler):
         self.set_header("Cache-Control", "max-age=0")
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         entity_id = self.get_argument("id")
         #user_id = self.current_user["user_id"].encode("utf8")
@@ -116,6 +118,7 @@ class PostStatusAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         user_id = self.current_user["user_id"].encode("utf8")
         content = self.get_argument("content").encode("utf8")
@@ -129,6 +132,7 @@ class LikeAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         activity_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
@@ -140,6 +144,7 @@ class UnlikeAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         activity_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
@@ -151,6 +156,7 @@ class PostCommentAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         activity_id = self.get_argument("id").encode("utf8")
         user_id = self.current_user["user_id"].encode("utf8")
@@ -165,6 +171,7 @@ class ProfileImgAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST, DELETE')
@@ -192,6 +199,7 @@ class FollowAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         user_id = self.current_user["user_id"].encode("utf8")
         friend_ids = self.get_argument("friend_ids").encode("utf8").split(",")
@@ -201,6 +209,7 @@ class UnfollowAPIHandler(BaseHandler):
     def post(self):
         if not self.current_user:
             raise tornado.web.HTTPError(401, "User not login")
+            return
 
         user_id = self.current_user["user_id"].encode("utf8")
         friend_ids = self.get_argument("friend_ids").encode("utf8").split(",")
