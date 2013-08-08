@@ -49,16 +49,19 @@ def daily(hours):
     msg.bodyHtml = loader.load("email_daily.html").generate(posts=posts_to_email, _=locale.translate)
 
     users = []
+    users_not_to_send = []
     users_exists = conn.query("SELECT * FROM index_login")
     for user_id, user in nomagic._get_entities_by_ids([user_exists["entity_id"] for user_exists in users_exists]):
         if user.get("receive_daily_email", True):
-            #print user["email"]
             users.append(user)
+        else:
+            users_not_to_send.append(user)
 
     users_invited = conn.query("SELECT * FROM invite")
 
     sender = amazon_ses.AmazonSES(settings["AmazonAccessKeyID"], settings["AmazonSecretAccessKey"])
-    for email in set([user["login"] for user in users_exists] + [user["email"] for user in users_invited]):
+    emails = set([user["login"] for user in users_exists] + [user["email"] for user in users_invited]) - set([user["email"] for user in users_not_to_send])
+    for email in emails:
         if "@" in email:
             print email
             sender.sendEmail(settings["email_sender"], email, msg)
